@@ -5,9 +5,9 @@ import HomeBanner from "@/components/Home/HomeBanner";
 export default function Home() {
   return (
     <>
-    <div className="bg-[#113A98]">
+    <div className="bg-[#113A98] overflow-x-hidden">
       <Navbar className="fixed top-0 left-0 w-full z-50" />
-      <div className="min-h-screen bg-[url('/homestars.png')] bg-cover bg-center text-center p-10 pt-24">
+      <div className="min-h-screen bg-[url('/homestars.png')] bg-cover bg-center text-center">
       <HomeBanner/>
        
       </div>

@@ -21,12 +21,21 @@ export default function Dashboard() {
         <AdminHeader />
         
         <div className="p-10">
-          <a
-            href="/api/export?download=true"
-            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors inline-block"
-          >
-            Export Excel
-          </a>
+          <div className="flex gap-4 mb-6">
+            <a
+              href="/api/export?download=true"
+              className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors inline-block"
+            >
+              Export Excel
+            </a>
+            
+            <a
+              href="/admin/gallery"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors inline-block"
+            >
+              Manage Gallery
+            </a>
+          </div>
 
           <h2 className="mt-6 text-xl font-semibold">Admissions</h2>
           {admissions.map(a => (

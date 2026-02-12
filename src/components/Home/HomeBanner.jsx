@@ -94,17 +94,18 @@ const HomeBanner = () => {
                     </motion.div>
                 </div>
             </div>
-            <motion.div 
-                className='relative mt-[-130px] md:mt-[-300px] z-10 w-fit'
-                animate={{ rotate: 360 }}
-                transition={{
-                    duration: 20,
-                    ease: "linear",
-                    repeat: Infinity
-                }}
-            >
-                <Image src="/eathlogo.png" alt="Earth Logo" width={200} height={200} />
-            </motion.div>
+            <div className='relative mt-[-130px] md:mt-[-300px] z-10 w-fit drop-shadow-2xl'>
+                <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{
+                        duration: 20,
+                        ease: "linear",
+                        repeat: Infinity
+                    }}
+                >
+                    <Image src="/eathlogo.png" alt="Earth Logo" width={200} height={200} />
+                </motion.div>
+            </div>
 
         </div>
 

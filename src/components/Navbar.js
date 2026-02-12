@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,8 +12,21 @@ const poppins = Poppins({
   weight: ["400", "600", "700"],
 });
 
-export default function Navbar() {
+export default function Navbar({className}) {
   const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const NavLink = ({ href, children }) => (
     <Link
@@ -27,7 +41,9 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="flex items-center justify-between px-10 py-4 bg-transparent text-white">
+    <nav className={`${className} flex items-center justify-between px-10 py-4 transition-all duration-1000 ease-in-out text-white ${
+      isScrolled ? "bg-[#000E30] shadow-md" : "bg-transparent"
+    }`}>
 
       {/* Brand Section */}
       <div className="flex items-center gap-3">

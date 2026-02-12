@@ -1,15 +1,83 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { Poppins } from "next/font/google";
+import { ChevronsRight } from "lucide-react";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const NavLink = ({ href, children }) => (
+    <Link
+      href={href}
+      className={`text-[14px] font-bold pb-1 border-b-2 transition-all duration-300 ${pathname === href
+          ? "border-[#E6AF2E]"
+          : "border-transparent hover:border-[#E6AF2E]"
+        }`}
+    >
+      {children}
+    </Link>
+  );
+
   return (
-    <nav className="bg-pink-500 text-white p-4 flex gap-6">
-      <Link href="/">Home</Link>
-      <Link href="/about">About</Link>
-      <Link href="/programs">Programs</Link>
-      <Link href="/admission">Admission</Link>
-      <Link href="/teacher-training">Teacher Training</Link>
-      <Link href="/gallery">Gallery</Link>
-      <Link href="/contact">Contact</Link>
+    <nav className="flex items-center justify-between px-10 py-4 bg-transparent text-white">
+
+      {/* Brand Section */}
+      <div className="flex items-center gap-3">
+        <Image
+          src="/kidzstar_logo.png"
+          alt="KidzStar Logo"
+          width={65}
+          height={65}
+          className="object-contain"
+        />
+        <Image
+          src="/title.png"
+          alt="KidzStar Title"
+          width={103}
+          height={45}
+          className="object-contain"
+        />
+      </div>
+
+      {/* Navigation Links */}
+      <div className={`${poppins.className} flex items-center gap-8`}>
+        <NavLink href="/">Home</NavLink>
+        <NavLink href="/about">About Us</NavLink>
+        <NavLink href="/programs">Programs</NavLink>
+        <NavLink href="/pages">Pages</NavLink>
+        <NavLink href="/contact">Contact Us</NavLink>
+        <NavLink href="/gallery">Gallery</NavLink>
+        <NavLink href="/teacher-training">Teacher's Course</NavLink>
+
+        {/* Admission Button */}
+        <div className="relative shadow-lg w-[167px] h-[53px] cursor-pointer group">
+          <Image
+            src="/button_yellow.svg"
+            alt="Admission Button"
+            fill
+            className="object-contain"
+          />
+
+          <div className="absolute inset-0 flex items-center justify-between px-7">
+            <span className="text-[14px] font-bold text-white">
+              Admission
+            </span>
+
+            <ChevronsRight
+              size={28}
+              className="text-white transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </div>
+        </div>
+      </div>
     </nav>
   );
 }

@@ -57,7 +57,7 @@ const HomeBanner = () => {
                 </div>
             </div>
 
-            <div className="flex-1 mt-[60px] flex justify-center relative w-full max-w-[2000px] h-[500px] md:h-[900px]">
+            <div className="flex-1 flex justify-center relative w-full max-w-[2000px] h-[500px] md:h-[900px]">
                 <motion.div 
                     style={{ scale: triangleScale }}
                     className="absolute inset-0 flex items-center justify-center scale-125 md:scale-150"

@@ -1,19 +1,20 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HomeBanner from "@/components/Home/HomeBanner";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen bg-pink-50 text-center p-10">
-        <h1 className="text-4xl font-bold text-pink-600">
-          Welcome to Little Stars Preschool
-        </h1>
-        <p className="mt-4 text-lg">
-          A place where learning begins with joy.
-        </p>
+    <div className="bg-[#113A98]">
+      <Navbar className="fixed top-0 left-0 w-full z-50" />
+      <div className="min-h-screen bg-[url('/homestars.png')] bg-cover bg-center text-center p-10 pt-24">
+      <HomeBanner/>
+       
       </div>
       <Footer />
+
+    </div>
+      
     </>
   );
 }

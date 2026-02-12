@@ -17,9 +17,9 @@ export default function Navbar() {
   const NavLink = ({ href, children }) => (
     <Link
       href={href}
-      className={`text-[14px] font-bold pb-1 border-b-2 transition-all duration-300 ${pathname === href
+      className={`text-[14px] font-bold border-b-2 transition-all duration-300 ${pathname === href
           ? "border-[#E6AF2E]"
-          : "border-transparent hover:border-[#E6AF2E]"
+          : "border-transparent "
         }`}
     >
       {children}
@@ -58,7 +58,7 @@ export default function Navbar() {
         <NavLink href="/teacher-training">Teacher's Course</NavLink>
 
         {/* Admission Button */}
-        <div className="relative shadow-lg w-[167px] h-[53px] cursor-pointer group">
+        <div className="relative  w-[167px] h-[53px] cursor-pointer group">
           <Image
             src="/button_yellow.svg"
             alt="Admission Button"

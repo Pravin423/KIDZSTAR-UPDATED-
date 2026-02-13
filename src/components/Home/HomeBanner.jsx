@@ -108,7 +108,7 @@ const HomeBanner = () => {
                     </motion.div>
                 </div>
             </div>
-            <div className='relative mt-[-130px] md:mt-[-300px] z-10 w-fit drop-shadow-2xl'>
+            <div className='relative mt-[-130px] md:mt-[-300px]  w-fit drop-shadow-2xl'>
                 <motion.div 
                     animate={{ rotate: 360 }}
                     transition={{

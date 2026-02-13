@@ -39,13 +39,14 @@ const WelcomeBanner = () => {
             >
                 <div className='flex flex-col md:flex-row w-full items-center justify-between px-10 md:px-20'>
                     <motion.div
-                        initial={{ x: -200, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
-                        viewport={{ once: true }}
-                        animate={{
+                        initial={{ x: -200, opacity: 0, scale: 1, y: 0 }}
+                        whileInView={{ 
+                            x: 0, 
+                            opacity: 1,
                             scale: [1, 1.05, 1],
                             y: [0, -15, 0],
                         }}
+                        viewport={{ once: true }}
                         transition={{
                             x: { duration: 0.8, delay: 0.2, ease: "easeOut" },
                             opacity: { duration: 0.8, delay: 0.2 },
@@ -59,11 +60,17 @@ const WelcomeBanner = () => {
                     <div className="flex items-center ml-[100px] mt-[-230px] justify-center gap-2 md:gap-4 flex-1 w-full">
 
                         {/* Left Text Section */}
-                        <div className="flex flex-col gap-1">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="flex flex-col gap-1"
+                        >
 
                             {/* Small Top Text */}
                             <p className={`${poppins.className} ml-[50px] text-[#FF6D92] text-[24px] font-normal mb-1`}>
-                                Welcome to KidzStar
+                                Welcome to Kidzstar
                             </p>
 
                             {/* Play & Learn Image */}
@@ -87,7 +94,7 @@ const WelcomeBanner = () => {
                                 At Kidzstar Pre Primary School, our mission is to provide a safe, stimulating, and inclusive environment where children are encouraged to explore, learn, and develop at their own pace. Through a blend of hands-on activities, creative play, and personalized attention, we aim to build a strong foundation in early childhood education.
                             </p>
 
-                        </div>
+                        </motion.div>
 
                         {/* Right Image Section */}
                         <div className="flex justify-end mr-[30px] self-start mt-[-10px] md:mt-[-50px]">

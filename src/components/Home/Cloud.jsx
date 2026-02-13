@@ -7,11 +7,11 @@ const Cloud = () => {
   const { scrollYProgress } = useScroll();
   
   // As user scrolls through the component, clouds move from their outer positions to meet in the middle
-  const leftCloudX = useTransform(scrollYProgress, [0, 1], [-200, 40]);
-  const rightCloudX = useTransform(scrollYProgress, [0, 1], [200, -40]);
+  const leftCloudX = useTransform(scrollYProgress, [0, 1], [-400, 40]);
+  const rightCloudX = useTransform(scrollYProgress, [0, 1], [400, -40]);
 
   return (
-    <div className='flex w-full relative h-[150px] md:h-[350px] overflow-hidden'>
+    <div className='flex w-screen relative h-[150px] md:h-[350px] overflow-hidden'>
         <motion.div 
             style={{ x: leftCloudX }}
             className="absolute left-0 w-3/5 h-full"

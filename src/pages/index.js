@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import HomeBanner from "@/components/Home/HomeBanner";
 import WelcomeBanner from "@/components/Home/WelcomeBanner";
 import Cloud from "@/components/Home/Cloud";
+import Details from "@/components/Home/Details";
 
 export default function Home() {
   return (
@@ -22,9 +23,12 @@ export default function Home() {
           <Cloud />
 
         </div>
-        
-        
-        
+        <div className="mt-[-190px]">
+          <Details />
+        </div>
+
+
+
 
 
         <Footer />

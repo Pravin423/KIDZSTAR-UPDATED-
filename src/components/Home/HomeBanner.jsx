@@ -20,7 +20,12 @@ const HomeBanner = () => {
     return (
         <div className="overflow-hidden">
             <div className="px-6 gap-[40px] md:pl-[100px] flex flex-col md:flex-row items-center justify-between">
-                <div className='flex  flex-col items-center md:items-start text-center md:text-left flex-1'>
+                <motion.div 
+                    initial={{ opacity: 0, x: -100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className='flex  flex-col items-center md:items-start text-center md:text-left flex-1'
+                >
 
                     <h1 className={`${poppins.className} text-5xl md:text-[96px] leading-none font-bold text-white drop-shadow-4xl`}>
                         Admission
@@ -35,11 +40,20 @@ const HomeBanner = () => {
                         </h2>
                     </div>
 
-                    <p className={`${poppins.className} md:ml-[40px] mt-4 md:mt-[-4px] text-sm md:text-[20px] text-white font-extralight mb-8`}>
+                    <motion.p 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+                        className={`${poppins.className} md:ml-[40px] mt-4 md:mt-[-4px] text-sm md:text-[20px] text-white font-extralight mb-8`}
+                    >
                         Playground <span className="hidden md:inline">&nbsp;|&nbsp;</span><br className="md:hidden" /> Nursery <span className="hidden md:inline">&nbsp;|&nbsp;</span><br className="md:hidden" /> JR.KG <span className="hidden md:inline">&nbsp;|&nbsp;</span><br className="md:hidden" /> SR.KG
-                    </p>
+                    </motion.p>
 
-                    <div className="relative w-[180px] h-[56px] md:w-[223px] md:h-[70px] md:ml-[100px] md:mt-[-10px] cursor-pointer group">
+                    <motion.div 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="relative w-[180px] h-[56px] md:w-[223px] md:h-[70px] md:ml-[100px] md:mt-[-10px] cursor-pointer group"
+                    >
                         <Image
                             src="/button_cyan.png"
                             alt="Admission Button"
@@ -55,8 +69,8 @@ const HomeBanner = () => {
                                 className="text-white transition-transform duration-300 group-hover:translate-x-1"
                             />
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
 
                 <div className="flex-1 flex justify-center relative w-full max-w-[2000px] h-[500px] md:h-[900px]">
                     <motion.div

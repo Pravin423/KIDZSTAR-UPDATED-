@@ -74,7 +74,7 @@ export default function Navbar({className}) {
         <NavLink href="/teacher-training">Teacher's Course</NavLink>
 
         {/* Admission Button */}
-        <div className="relative  w-[167px] h-[53px] cursor-pointer group">
+        <div className="relative w-[167px] h-[53px] cursor-pointer group transition-transform duration-300 hover:scale-105 active:scale-95">
           <Image
             src="/button_yellow.svg"
             alt="Admission Button"

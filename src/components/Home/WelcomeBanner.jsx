@@ -4,6 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Poppins } from "next/font/google";
 import { ADLaM_Display } from "next/font/google";
+import { ChevronsRight } from "lucide-react";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -40,8 +41,8 @@ const WelcomeBanner = () => {
                 <div className='flex flex-col md:flex-row w-full items-center justify-between px-10 md:px-20'>
                     <motion.div
                         initial={{ x: -200, opacity: 0, scale: 1, y: 0 }}
-                        whileInView={{ 
-                            x: 0, 
+                        whileInView={{
+                            x: 0,
                             opacity: 1,
                             scale: [1, 1.05, 1],
                             y: [0, -15, 0],
@@ -57,10 +58,10 @@ const WelcomeBanner = () => {
                         <Image src="/colorchild.png" alt="ColorHand" width={536} height={453} className="object-contain" />
                     </motion.div>
 
-                    <div className="flex items-center ml-[100px] mt-[-230px] justify-center gap-2 md:gap-4 flex-1 w-full">
+                    <div className="flex items-center ml-[100px] mt-[-180px] justify-center gap-2 md:gap-4 flex-1 w-full">
 
                         {/* Left Text Section */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -94,6 +95,27 @@ const WelcomeBanner = () => {
                                 At Kidzstar Pre Primary School, our mission is to provide a safe, stimulating, and inclusive environment where children are encouraged to explore, learn, and develop at their own pace. Through a blend of hands-on activities, creative play, and personalized attention, we aim to build a strong foundation in early childhood education.
                             </p>
 
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="relative w-[230px] h-[56px] md:w-[230px] md:h-[70px] ml-[100px] mt-6 cursor-pointer group"
+                            >
+                                <Image
+                                    src="/greenbutton.png"
+                                    alt="Admission Button"
+                                    fill
+                                    className="object-contain"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center gap-2">
+                                    <span className={`${poppins.className} text-lg md:text-[24px] font-bold text-white`}>
+                                        Know More
+                                    </span>
+                                    <ChevronsRight
+                                        size={28}
+                                        className="text-white transition-transform duration-300 group-hover:translate-x-1"
+                                    />
+                                </div>
+                            </motion.div>
                         </motion.div>
 
                         {/* Right Image Section */}

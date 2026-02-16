@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from "react";
 import { Poppins } from "next/font/google";
+import Image from 'next/image';
+import { ChevronsRight } from "lucide-react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -34,7 +36,7 @@ const EnquiryForm = ({
     alert("Application Submitted!");
     setSubmitted(true);
   };
-  
+
   return (
     <div>
       {isShortForm ? (
@@ -52,8 +54,22 @@ const EnquiryForm = ({
                 className="w-full bg-white/20 border border-white/30 p-2 rounded-lg text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-400" required />
               <input name="phone" placeholder="Phone Number" onChange={handleChange}
                 className="w-full bg-white/20 border border-white/30 p-2 rounded-lg text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-400" required />
-              <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-[#1f2f8f] font-bold py-2 rounded-lg transition-colors">
-                Get Call Back
+              <button type="submit" className="relative w-full h-[56px] flex items-center justify-center cursor-pointer group">
+                <Image
+                  src="/greenbutton.png"
+                  alt="Submit Button"
+                 fill
+                  className="object-contain pointer-events-none"
+                />
+                <div className="absolute inset-0 flex items-center justify-center gap-2">
+                  <span className={`${poppins.className} text-lg md:text-[14px] font-bold text-white`}>
+                   Get a Call Back
+                  </span>
+                  <ChevronsRight
+                    size={28}
+                    className="text-white transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </div>
               </button>
             </form>
           )}

@@ -4,6 +4,9 @@ import HomeBanner from "@/components/Home/HomeBanner";
 import WelcomeBanner from "@/components/Home/WelcomeBanner";
 import Cloud from "@/components/Home/Cloud";
 import Details from "@/components/Home/Details";
+import Cloud2 from "@/components/Home/Cloud2";
+
+
 
 export default function Home() {
   return (
@@ -26,12 +29,15 @@ export default function Home() {
         <div className="mt-[-190px]">
           <Details />
         </div>
+        <div className="mt-[-160px]">
+          <Cloud />
 
-
-
-
-
-        <Footer />
+        </div>
+         <div className="mt-[-160px]">
+            <Footer />
+         </div>
+        
+      
 
       </div>
 

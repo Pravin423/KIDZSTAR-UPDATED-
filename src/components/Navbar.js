@@ -83,6 +83,7 @@ export default function Navbar({className}) {
           />
 
           <div className="absolute inset-0 flex items-center justify-between px-7">
+            <Link href="/admission" className="absolute inset-0 z-10" />
             <span className="text-[14px] font-bold text-white">
               Admission
             </span>

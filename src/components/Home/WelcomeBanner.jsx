@@ -20,13 +20,14 @@ const WelcomeBanner = () => {
     return (
         <motion.div
             className="overflow-hidden flex flex-col"
-            initial={{ x: -1000, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
+            initial={{ y: 200, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{
                 type: "spring",
-                stiffness: 100,
-                damping: 12,
+                stiffness: 50,
+                damping: 20,
+                mass: 1,
                 duration: 1
             }}
         >

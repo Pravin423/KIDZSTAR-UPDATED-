@@ -78,7 +78,7 @@ const Details = () => {
                 alt="kid"
                 width={209}
                 height={333}
-                className="object-contain mt-[400px]"
+                className="object-contain mt-[590px] ml-[100px]"
             />
 
             {/* Cards */}

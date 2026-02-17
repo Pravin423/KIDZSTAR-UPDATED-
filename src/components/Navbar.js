@@ -12,11 +12,13 @@ const poppins = Poppins({
   weight: ["400", "600", "700"],
 });
 
-export default function Navbar({className}) {
+export default function Navbar({ className, disableScrollEffect = false }) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
+    if (disableScrollEffect) return;
+
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setIsScrolled(true);
@@ -26,14 +28,14 @@ export default function Navbar({className}) {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [disableScrollEffect]);
 
   const NavLink = ({ href, children }) => (
     <Link
       href={href}
       className={`text-[14px] font-bold border-b-2 transition-all duration-300 ${pathname === href
-          ? "border-[#E6AF2E]"
-          : "border-transparent "
+        ? "border-[#E6AF2E]"
+        : "border-transparent "
         }`}
     >
       {children}
@@ -41,9 +43,8 @@ export default function Navbar({className}) {
   );
 
   return (
-    <nav className={`${className} flex items-center justify-between px-10 py-4 transition-all duration-1000 ease-in-out text-white ${
-      isScrolled ? "bg-[#000E30] shadow-md" : "bg-transparent"
-    }`}>
+    <nav className={`${className} flex items-center justify-between px-10 py-4 transition-all duration-1000 ease-in-out text-white ${isScrolled && !disableScrollEffect ? "bg-[#000E30] shadow-md" : "bg-transparent"
+      }`}>
 
       {/* Brand Section */}
       <div className="flex items-center gap-3">

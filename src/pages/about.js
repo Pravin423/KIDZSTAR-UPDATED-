@@ -3,8 +3,22 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ZoomScroll from "@/components/ZoomScroll";
+import StarryText from "@/components/StarryText";
+import { Inter } from "next/font/google";
+import { motion, useScroll, useTransform } from "framer-motion";
+
+const inter = Inter({ subsets: ["latin"], weight: ["500", "700"] });
 
 export default function About() {
+  const { scrollYProgress } = useScroll();
+
+  // Custom transforms for the "Creative Surroundings" section
+  // Container: Fade in/out, Mix Blend Mode, White Background
+  const containerOpacity = useTransform(scrollYProgress, [0.5, 0.6, 0.85, 0.95], [0, 1, 1, 0]);
+
+  // Text: Slide In and Out
+  const textX = useTransform(scrollYProgress, [0.5, 0.6, 0.85, 0.95], ["-100%", "0%", "0%", "100%"]);
+
   return (
     <>
       <Head>
@@ -15,7 +29,7 @@ export default function About() {
         <Navbar className="fixed top-0 left-0 right-0 w-full z-30" disableScrollEffect={true} />
 
         {/* Main scroll container to create scrollable height */}
-        <div className="relative h-[300vh]">
+        <div className="relative h-[400vh]">
 
           {/* Fixed Background Video */}
           <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
@@ -51,6 +65,18 @@ export default function About() {
           >
             Welcome to Kidzstar
           </ZoomScroll>
+
+          {/* Animation 3: Creative Surroundings - Custom Slide In/Out */}
+          <motion.div
+            style={{ opacity: containerOpacity }}
+            className={`fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-20 mix-blend-screen bg-white text-black font-alfa text-[120px] leading-tight uppercase text-center`}
+          >
+            <motion.div style={{ x: textX }} className="w-full h-full flex items-center justify-center">
+              <StarryText className="w-full h-full">
+                Creative Surroundings<br />to Borderless Future
+              </StarryText>
+            </motion.div>
+          </motion.div>
 
         </div>
 

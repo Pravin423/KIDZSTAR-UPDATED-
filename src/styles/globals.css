@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 
 :root {
   --background: #ffffff;
@@ -25,4 +26,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@layer utilities {}
+@layer utilities {
+  .font-alfa {
+    font-family: 'Alfa Slab One', serif;
+    font-weight: 400;
+  }
+}

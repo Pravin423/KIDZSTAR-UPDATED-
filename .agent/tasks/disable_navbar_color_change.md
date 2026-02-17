@@ -1,23 +1,27 @@
 # Task: Disable Navbar Color Change on About Us Page
 
 ## Objective
-Prevent the Navbar from changing its background color to dark blue while scrolling on the About Us page, specifically during the zoom animation. Also ensure the text color in the animation matches the user's preference (White text with Gray shadow) using ONLY Tailwind CSS (no external CSS).
+Prevent the Navbar from changing its background color. Implement specific animations for "About Us" and "Welcome". Add a "Creative Surroundings" section with a video-fill effect, interactive stars, and specific slide-in behavior.
 
 ## Changes Made
 
 ### 1. Modified `src/components/Navbar.js`
-- Added a `disableScrollEffect` prop (defaulting to `false`).
-- Updated the `useEffect` hook to skip the scroll event listener if `disableScrollEffect` is true.
-- Updated the `nav` className logic to check `!disableScrollEffect` before applying the darkened background class.
+- Added `disableScrollEffect` prop.
 
 ### 2. Modified `src/pages/about.js`
-- Passed `disableScrollEffect={true}` to the `<Navbar />` component.
-- **Replaced external CSS classes with inline Tailwind arbitrary values.**
-    - Replaced `text-shadow-glow-blue` and `text-shadow-glow-yellow` with `text-white [text-shadow:...]`.
-    - The shadow value is inlined directly in the className: `[text-shadow:6px_6px_#808080,5px_5px_#808080,...]`.
+- Passed `disableScrollEffect={true}` to Navbar.
+- Configured "About Us" and "Welcome" animations (White text, Gray shadow).
+- **Custom Creative Surroundings Animation**:
+    - Replaced the third `ZoomScroll` with custom `framer-motion` implementation (`motion.div`s).
+    - **Container**: Fixed, mix-blend-screen, bg-white. Controls `opacity` (fade in/out).
+    - **Text Content**: Inner `motion.div`. Controls `x` (slide in/out).
+    - **Result**: The white background fades in and stays *stationary*, while the text ("Creative Surroundings...") slides in from the left and later slides out to the right.
 
-### 3. Modified `src/styles/globals.css`
-- **Removed** `.text-shadow-glow-blue` and `.text-shadow-glow-yellow` classes entirely, as requested ("no external css").
+### 3. Created `src/components/StarryText.js` (StarryCursor Effect)
+- **Cursor Trail**: Stars spawn at the cursor position.
+- **Ambient Stars**: Stars spawn randomly across the screen every 1 second.
+- **Animation**: Stars pop in, rotate, and fade out.
+- **Styling**: `absolute`, `text-black`, `pointer-events-auto`.
 
 ## Result
-The Navbar will now remain transparent on the About Us page regardless of scroll position. The animated text will appear in White with a Gray shadow/glow using purely inline Tailwind classes.
+The "Creative Surroundings" section features a stationary white background that fades in. Overlaid on this is **Alfa Slab One** text at **120px** which slides in from the left. Stars can be spawned anywhere on the screen (white area), and the text reveals the underlying space video.

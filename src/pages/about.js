@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Image from "next/image";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -71,10 +72,53 @@ export default function About() {
             style={{ opacity: containerOpacity }}
             className={`fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-20 mix-blend-screen bg-white text-black font-alfa text-[120px] leading-tight uppercase text-center`}
           >
-            <motion.div style={{ x: textX }} className="w-full h-full flex items-center justify-center">
+            {/* Rotating Earth Logo */}
+            <motion.div
+              className="absolute bottom-[10%] left-[10%] w-[150px] md:w-[200px]"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 20,
+                ease: "linear",
+                repeat: Infinity
+              }}
+            >
+              <Image
+                src="/eathlogo.png"
+                alt="Earth Logo"
+                width={200}
+                height={200}
+                className="object-contain"
+              />
+            </motion.div>
+
+            {/* Floating Saturn Logo */}
+            <motion.div
+              className="absolute top-[15%] right-[15%] w-[120px] md:w-[180px]"
+              animate={{
+                y: [0, -15, 0],
+                rotate: [0, 5, 0, -5, 0]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <Image
+                src="/staurnlogo.png"
+                alt="Saturn Logo"
+                width={180}
+                height={120}
+                className="object-contain"
+              />
+            </motion.div>
+
+            <motion.div style={{ x: textX }} className="w-full h-full flex items-center justify-center relative">
               <StarryText className="w-full h-full">
                 Creative Surroundings<br />to Borderless Future
               </StarryText>
+
+
             </motion.div>
           </motion.div>
 

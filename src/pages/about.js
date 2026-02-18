@@ -38,11 +38,11 @@ export default function About() {
         <title>About Us - Kidzstar</title>
       </Head>
 
-      <div className="relative bg-[#0D3697] overflow-x-hidden">
+      <div className="relative bg-[#0D3697]">
         <Navbar className="fixed top-0 left-0 right-0 w-full z-30" disableScrollEffect={!isNavbarActive} />
 
         {/* Main scroll container to create scrollable height */}
-        <div className="relative h-[400vh]">
+        <div className="relative h-[400vh] overflow-x-hidden">
 
           {/* Fixed Background Video */}
           <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">

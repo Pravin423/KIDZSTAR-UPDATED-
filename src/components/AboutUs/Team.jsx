@@ -1,156 +1,271 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700", "800"],
+});
 
 const teamMembers = [
-    { id: 1, name: "Wilson Arcand", role: "Specialist in Mathematics", image: "/teacher1.jpg ", bg: "#FFA500" },
-    { id: 2, name: "Rayna Rhiel Madsen", role: "Music Teacher", image: "/teacher2.jpg", bg: "#FF69B4" },
-    { id: 3, name: "Kaiya Dorwart", role: "Specialist in Mathematics", image: "/teacher3.jpg", bg: "#87CEEB" },
-    { id: 4, name: "Davina Grissom", role: "Arts & Crafts", image: "/teacher4.jpg", bg: "#9370DB" },
-    { id: 5, name: "Marcus Bell", role: "Physical Education", image: "/teacher5.jpg", bg: "#50C878" },
+    { id: 1, name: "Wilson Arcand", role: "Specialist in Mathematics", image: "/teacher1.jpg" },
+    { id: 2, name: "Rayna Rhiel Madsen", role: "Music Teacher", image: "/teacher2.jpg" },
+    { id: 3, name: "Kaiya Dorwart", role: "Specialist in Mathematics", image: "/teacher3.jpg" },
+    { id: 4, name: "Davina Grissom", role: "Arts & Crafts", image: "/teacher4.jpg" },
+    { id: 5, name: "Marcus Bell", role: "Physical Education", image: "/teacher5..jpg" },
 ];
 
+const total = teamMembers.length;
+
+const SLOT_STYLES = {
+    left: { x: -320, rotate: -8, scale: 0.78, opacity: 0.6, zIndex: 1 },
+    center: { x: 0, rotate: 0, scale: 1, opacity: 1, zIndex: 3 },
+    right: { x: 320, rotate: 8, scale: 0.78, opacity: 0.6, zIndex: 1 },
+    // off-screen entry/exit positions
+    farLeft: { x: -560, rotate: -14, scale: 0.6, opacity: 0, zIndex: 0 },
+    farRight: { x: 560, rotate: 14, scale: 0.6, opacity: 0, zIndex: 0 },
+};
+
+const SPRING = {
+    type: "spring",
+    stiffness: 180,
+    damping: 30,
+    mass: 1,
+};
+
 export default function Team() {
-    const [index, setIndex] = useState(0);
-    const [direction, setDirection] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
 
-    const nextStep = () => {
-        setDirection(1);
-        setIndex((prev) => (prev + 1) % teamMembers.length);
+    const prevIdx = (activeIndex - 1 + total) % total;
+    const nextIdx = (activeIndex + 1) % total;
+
+    const goNext = () => {
+        if (isAnimating) return;
+        setIsAnimating(true);
+        setActiveIndex((prev) => (prev + 1) % total);
     };
 
-    const prevStep = () => {
-        setDirection(-1);
-        setIndex((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+    const goPrev = () => {
+        if (isAnimating) return;
+        setIsAnimating(true);
+        setActiveIndex((prev) => (prev - 1 + total) % total);
     };
 
-    // Variants for smooth sliding and scaling
-    const variants = {
-        enter: (direction) => ({
-            x: direction > 0 ? 150 : -150,
-            opacity: 0,
-            scale: 0.5,
-        }),
-        center: {
-            zIndex: 1,
-            x: 0,
-            opacity: 1,
-            scale: 1,
-        },
-        exit: (direction) => ({
-            zIndex: 0,
-            x: direction < 0 ? 150 : -150,
-            opacity: 0,
-            scale: 0.5,
-        }),
+    const goTo = (i) => {
+        if (isAnimating || i === activeIndex) return;
+        setIsAnimating(true);
+        setActiveIndex(i);
     };
 
     return (
-        <section className="w-full py-24 bg-slate-50 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 text-center">
-                {/* Header Section */}
+        <section className={`w-full py-24 bg-slate-50 overflow-hidden relative ${poppins.className}`}>
+
+            {/* Animated SVG background */}
+            <svg
+                className="absolute inset-0 w-full h-full"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ zIndex: 0 }}
+                aria-hidden="true"
+            >
+                <defs>
+                    <filter id="blur1">
+                        <feGaussianBlur stdDeviation="40" />
+                    </filter>
+                    <filter id="blur2">
+                        <feGaussianBlur stdDeviation="48" />
+                    </filter>
+                </defs>
+
+                {/* Navy blob — top left, slow drift */}
+                <ellipse cx="20%" cy="30%" rx="180" ry="150" fill="#00218E" opacity="0.14" filter="url(#blur1)">
+                    <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        values="0,0; 90,-70; 50,60; -70,25; 0,0"
+                        keyTimes="0; 0.25; 0.5; 0.75; 1"
+                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
+                        calcMode="spline"
+                        dur="18s"
+                        repeatCount="indefinite"
+                    />
+                </ellipse>
+
+                {/* Gold blob — bottom right, slow drift */}
+                <ellipse cx="80%" cy="70%" rx="200" ry="160" fill="#F5C842" opacity="0.16" filter="url(#blur1)">
+                    <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        values="0,0; -80,-55; -35,75; 65,35; 0,0"
+                        keyTimes="0; 0.25; 0.5; 0.75; 1"
+                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
+                        calcMode="spline"
+                        dur="22s"
+                        repeatCount="indefinite"
+                    />
+                </ellipse>
+
+                {/* Indigo blob — center, slow drift */}
+                <ellipse cx="55%" cy="45%" rx="160" ry="130" fill="#6366F1" opacity="0.13" filter="url(#blur2)">
+                    <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        values="0,0; 60,-80; -55,45; 0,0"
+                        keyTimes="0; 0.33; 0.66; 1"
+                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
+                        calcMode="spline"
+                        dur="15s"
+                        repeatCount="indefinite"
+                    />
+                </ellipse>
+            </svg>
+
+            <div className="max-w-6xl mx-auto px-4 relative" style={{ zIndex: 1 }}>
+
+                {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    className="mb-16"
+                    transition={{ duration: 0.5 }}
+                    className="mb-20"
                 >
-
-                    <div className="flex items-center justify-center md:justify-start gap-4">
-                        <span className="w-12 h-[2px] bg-black"></span>
+                    <div className="flex items-center justify-start gap-4">
+                        <span className="w-12 h-[2px] bg-black" />
                         <h2 className="text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-black">
                             THE DREAM TEACHERS
                         </h2>
                     </div>
                 </motion.div>
 
-                {/* Carousel Container */}
-                <div className="relative flex items-center justify-center min-h-[500px]">
+                {/* Fan — 3 fixed slots, content swaps inside */}
+                <div className="relative flex items-center justify-center h-[400px] md:h-[460px]">
+                    <div className="relative w-[260px] md:w-[300px] h-full">
 
-                    {/* Navigation Controls */}
-                    <div className="absolute inset-0 flex items-center justify-between z-20 pointer-events-none px-4 md:px-0">
-                        <button
-                            onClick={prevStep}
-                            className="pointer-events-auto w-12 h-12 rounded-full bg-white/80 backdrop-blur-md shadow-lg flex items-center justify-center border border-slate-200 text-slate-700 transition-all active:scale-90" onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#00218E'; e.currentTarget.style.color = 'white'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}
+                        {/* LEFT card */}
+                        <motion.div
+                            key={`left-${prevIdx}`}
+                            className="absolute inset-0 rounded-[40px] overflow-hidden cursor-pointer"
+                            style={{ transformOrigin: "bottom center" }}
+                            initial={SLOT_STYLES.farLeft}
+                            animate={SLOT_STYLES.left}
+                            exit={SLOT_STYLES.farLeft}
+                            transition={SPRING}
+                            onAnimationComplete={() => setIsAnimating(false)}
+                            onClick={goPrev}
                         >
-                            <ChevronLeft size={24} />
-                        </button>
-                        <button
-                            onClick={nextStep}
-                            className="pointer-events-auto w-12 h-12 rounded-full bg-white/80 backdrop-blur-md shadow-lg flex items-center justify-center border border-slate-200 text-slate-700 transition-all active:scale-90" onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#00218E'; e.currentTarget.style.color = 'white'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}
-                        >
-                            <ChevronRight size={24} />
-                        </button>
-                    </div>
+                            <div className="w-full h-full border-4 border-white shadow-lg" style={{ background: "linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)" }}>
+                                <Image
+                                    src={teamMembers[prevIdx].image}
+                                    alt={teamMembers[prevIdx].name}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        </motion.div>
 
-                    {/* Animated Card */}
-                    <div className="relative w-full max-w-sm flex items-center justify-center">
-                        <AnimatePresence initial={false} custom={direction} mode="wait">
-                            <motion.div
-                                key={index}
-                                custom={direction}
-                                variants={variants}
-                                initial="enter"
-                                animate="center"
-                                exit="exit"
-                                transition={{
-                                    x: { type: "spring", stiffness: 200, damping: 25 },
-                                    opacity: { duration: 0.2 },
-                                }}
-                                className="flex flex-col items-center"
+                        {/* CENTER card */}
+                        <motion.div
+                            key={`center-${activeIndex}`}
+                            className="absolute inset-0 rounded-[40px] overflow-hidden"
+                            style={{ transformOrigin: "bottom center" }}
+                            initial={SLOT_STYLES.farRight}
+                            animate={SLOT_STYLES.center}
+                            exit={SLOT_STYLES.farLeft}
+                            transition={SPRING}
+                        >
+                            <div
+                                className="w-full h-full border-4 border-white"
+                                style={{ boxShadow: "0 30px 70px rgba(0,0,0,0.28)", background: "linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)" }}
                             >
-                                {/* Image Blob with Dynamic Shadow */}
-                                <div
-                                    className="relative w-64 h-64 md:w-80 md:h-80 mb-8 transition-all duration-1000 ease-in-out"
-                                    style={{
-                                        background: teamMembers[index].bg,
-                                        borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%",
-                                        boxShadow: `0 30px 60px -12px ${teamMembers[index].bg}66`,
-                                    }}
-                                >
-                                    <div className="absolute inset-0 overflow-hidden rounded-[inherit]">
-                                        <Image
-                                            src={teamMembers[index].image}
-                                            alt={teamMembers[index].name}
-                                            fill
-                                            className="object-cover scale-105 hover:scale-110 transition-transform duration-500"
-                                        />
-                                    </div>
-                                </div>
+                                <Image
+                                    src={teamMembers[activeIndex].image}
+                                    alt={teamMembers[activeIndex].name}
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                            </div>
+                        </motion.div>
 
-                                {/* Content */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2 }}
-                                >
-                                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-                                        {teamMembers[index].name}
-                                    </h3>
-                                    <p className="font-semibold text-lg uppercase tracking-tight" style={{ color: "#00218E" }}>
-                                        {teamMembers[index].role}
-                                    </p>
-                                </motion.div>
-                            </motion.div>
-                        </AnimatePresence>
+                        {/* RIGHT card */}
+                        <motion.div
+                            key={`right-${nextIdx}`}
+                            className="absolute inset-0 rounded-[40px] overflow-hidden cursor-pointer"
+                            style={{ transformOrigin: "bottom center" }}
+                            initial={SLOT_STYLES.farRight}
+                            animate={SLOT_STYLES.right}
+                            exit={SLOT_STYLES.farRight}
+                            transition={SPRING}
+                            onClick={goNext}
+                        >
+                            <div className="w-full h-full border-4 border-white shadow-lg" style={{ background: "linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)" }}>
+                                <Image
+                                    src={teamMembers[nextIdx].image}
+                                    alt={teamMembers[nextIdx].name}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        </motion.div>
+
                     </div>
                 </div>
 
-                {/* Indicators */}
-                <div className="flex justify-center gap-3 mt-12">
-                    {teamMembers.map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => {
-                                setDirection(i > index ? 1 : -1);
-                                setIndex(i);
-                            }}
-                            className={`h-2.5 rounded-full transition-all duration-500 ${i === index ? "w-10" : "w-2.5 bg-slate-300 hover:bg-slate-400"}`}
-                            style={i === index ? { backgroundColor: "#00218E" } : {}}
-                        />
-                    ))}
+                {/* Active member info */}
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={activeIndex}
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -16 }}
+                        transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="text-center mt-10"
+                    >
+                        <h3 className="text-2xl md:text-3xl font-bold text-slate-900">
+                            {teamMembers[activeIndex].name}
+                        </h3>
+                        <p className="mt-1 font-semibold text-base uppercase tracking-wide" style={{ color: "#00218E" }}>
+                            {teamMembers[activeIndex].role}
+                        </p>
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Controls */}
+                <div className="flex items-center justify-center gap-6 mt-8">
+                    <button
+                        onClick={goPrev}
+                        className="w-11 h-11 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-slate-700 transition-colors duration-200 active:scale-90"
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#00218E'; e.currentTarget.style.color = 'white'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}
+                    >
+                        <ChevronLeft size={20} />
+                    </button>
+
+                    <div className="flex gap-2">
+                        {teamMembers.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => goTo(i)}
+                                className={`h-2.5 rounded-full transition-all duration-500 ${i === activeIndex ? "w-10" : "w-2.5 bg-slate-300 hover:bg-slate-400"
+                                    }`}
+                                style={i === activeIndex ? { backgroundColor: "#00218E" } : {}}
+                            />
+                        ))}
+                    </div>
+
+                    <button
+                        onClick={goNext}
+                        className="w-11 h-11 rounded-full bg-white shadow-md border border-slate-200 flex items-center justify-center text-slate-700 transition-colors duration-200 active:scale-90"
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#00218E'; e.currentTarget.style.color = 'white'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = ''; }}
+                    >
+                        <ChevronRight size={20} />
+                    </button>
                 </div>
+
             </div>
         </section>
     );

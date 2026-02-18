@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ZoomScroll from "@/components/ZoomScroll";
 import Vision from "@/components/AboutUs/Vision";
 import Team from "@/components/AboutUs/Team";
+import Curriculum from "@/components/AboutUs/Curriculum";
 import CreativeSurroundings from "@/components/AboutUs/CreativeSurroundings";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 
@@ -72,6 +73,12 @@ export default function About() {
         <div className="relative z-20 bg-white pb-20">
           <Team />
         </div>
+
+        {/* Step 6: Curriculum */}
+        <div className="relative z-20 bg-white">
+          <Curriculum />
+        </div>
+
 
         {/* Footer */}
         <div className="relative z-20">

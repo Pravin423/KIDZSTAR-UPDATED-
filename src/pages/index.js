@@ -19,7 +19,7 @@ export default function Home() {
 
 
         </div>
-        <div >
+        <div  >
           <WelcomeBanner />
         </div>
         <div className="mt-[-160px]">
@@ -33,11 +33,11 @@ export default function Home() {
           <Cloud />
 
         </div>
-         <div className="mt-[-160px]">
-            <Footer />
-         </div>
-        
-      
+        <div className="mt-[-160px]">
+          <Footer />
+        </div>
+
+
 
       </div>
 

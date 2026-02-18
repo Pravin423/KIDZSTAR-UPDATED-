@@ -249,7 +249,7 @@ export default function Curriculum() {
                 </div>
             </div>
 
-            {/* CSS Cat decoration — bottom right corner */}
+            {/* CSS Cat decoration — hidden; scroll cat from about.js lands here instead */}
             <div style={{
                 position: 'absolute',
                 bottom: '20px',
@@ -259,9 +259,10 @@ export default function Curriculum() {
                 aspectRatio: '1',
                 pointerEvents: 'none',
                 zIndex: 10,
-                transform: 'scale(0.18)',
+                transform: 'scale(0.32)',
                 transformOrigin: 'bottom right',
                 animation: 'catFloat 4s ease-in-out infinite',
+                display: 'none',
             }}>
                 <div style={{
                     position: 'absolute',
@@ -289,12 +290,12 @@ export default function Curriculum() {
 
             <style jsx global>{`
                 @keyframes catFloat {
-                    0%, 100% { transform: scale(0.18) translateY(0px); }
-                    50% { transform: scale(0.18) translateY(-18px); }
+                    0%, 100% { transform: scale(0.32) translateY(0px); }
+                    50% { transform: scale(0.32) translateY(-18px); }
                 }
                 @keyframes blink {
-                    0%, 25%, 28%, 100% { height: 0 }
-                    26.5% { height: 100% }
+                    0%, 10%, 13%, 100% { height: 0 }
+                    11.5% { height: 100% }
                 }
 
                 .perspective-1000 {
@@ -388,14 +389,14 @@ export default function Curriculum() {
                     width: 150%; height: 0%;
                     content: ""; background: var(--fur);
                     rotate: -10deg;
-                    animation: blink 10s linear infinite;
+                    animation: blink 1s linear infinite;
                 }
                 .css-cat-eye::after {
                     bottom: -10%; left: 50%; translate: -50%;
                     width: 150%; height: 0%;
                     content: ""; background: var(--fur);
                     rotate: -10deg;
-                    animation: blink 10s linear infinite;
+                    animation: blink 1s linear infinite;
                 }
             `}</style>
         </section>

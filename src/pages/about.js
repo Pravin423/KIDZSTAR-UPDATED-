@@ -8,6 +8,7 @@ import Team from "@/components/AboutUs/Team";
 import Curriculum from "@/components/AboutUs/Curriculum";
 import CreativeSurroundings from "@/components/AboutUs/CreativeSurroundings";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
+import CatChatbot from "@/components/CatChatbot";
 
 export default function About() {
   const { scrollY } = useScroll();
@@ -22,6 +23,7 @@ export default function About() {
   const [catRange, setCatRange] = useState([9999, 10000]);
   const [catVisible, setCatVisible] = useState(false);
   const [catLanded, setCatLanded] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     setIsNavbarActive(latest > 0.3);
@@ -137,6 +139,13 @@ export default function About() {
           <Footer />
         </div>
 
+        {/* ── Chatbot linked to Scroll Cat ── */}
+        <CatChatbot
+          isOpen={chatOpen}
+          onClose={() => setChatOpen(false)}
+          customTrigger={true}
+        />
+
         {/* ── Scroll-driven cat — visible from Creative through Curriculum ── */}
         {catVisible && (
           <motion.div
@@ -149,13 +158,15 @@ export default function About() {
               scale: catScale,
               opacity: 1,
               zIndex: 50,
-              pointerEvents: "none",
+              cursor: "pointer",
+              pointerEvents: "auto",
               fontSize: "0.55vmin",
               width: "90em",
               aspectRatio: "1",
               transformOrigin: catLanded ? "bottom right" : "top right",
               animation: catLanded ? "scrollCatFloat 4s ease-in-out infinite" : "none",
             }}
+            onClick={() => setChatOpen(true)}
           >
             {/* Moon */}
             <div style={{

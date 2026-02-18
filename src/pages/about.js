@@ -1,24 +1,34 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ZoomScroll from "@/components/ZoomScroll";
 import StarryText from "@/components/StarryText";
+import Vision from "@/components/AboutUs/Vision";
 import { Inter } from "next/font/google";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 
 const inter = Inter({ subsets: ["latin"], weight: ["500", "700"] });
 
 export default function About() {
   const { scrollYProgress } = useScroll();
+  const [isNavbarActive, setIsNavbarActive] = useState(false);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.55) {
+      setIsNavbarActive(true);
+    } else {
+      setIsNavbarActive(false);
+    }
+  });
 
   // Custom transforms for the "Creative Surroundings" section
   // Container: Fade in/out, Mix Blend Mode, White Background
-  const containerOpacity = useTransform(scrollYProgress, [0.5, 0.6, 0.85, 0.95], [0, 1, 1, 0]);
+  const containerOpacity = useTransform(scrollYProgress, [0.5, 0.6, 0.75, 0.8], [0, 1, 1, 0]);
 
   // Text: Slide In and Out
-  const textX = useTransform(scrollYProgress, [0.5, 0.6, 0.85, 0.95], ["-100%", "0%", "0%", "100%"]);
+  const textX = useTransform(scrollYProgress, [0.5, 0.6, 0.75, 0.8], ["-100%", "0%", "0%", "100%"]);
 
   return (
     <>
@@ -27,7 +37,7 @@ export default function About() {
       </Head>
 
       <div className="relative bg-[#0D3697] overflow-x-hidden">
-        <Navbar className="fixed top-0 left-0 right-0 w-full z-30" disableScrollEffect={true} />
+        <Navbar className="fixed top-0 left-0 right-0 w-full z-30" disableScrollEffect={!isNavbarActive} />
 
         {/* Main scroll container to create scrollable height */}
         <div className="relative h-[400vh]">
@@ -70,7 +80,7 @@ export default function About() {
           {/* Animation 3: Creative Surroundings - Custom Slide In/Out */}
           <motion.div
             style={{ opacity: containerOpacity }}
-            className={`fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-20 mix-blend-screen bg-white text-black font-alfa text-[120px] leading-tight uppercase text-center`}
+            className={`fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-20 mix-blend-screen bg-white text-black font-alfa text-[60px] leading-tight uppercase text-center`}
           >
             {/* Rotating Earth Logo */}
             <motion.div
@@ -127,8 +137,14 @@ export default function About() {
 
 
 
+
+        {/* Vision Section */}
+        <div className="relative z-20">
+          <Vision />
+        </div>
+
         {/* Footer Section - Appearing after animations */}
-        <div className="relative z-20 mt-[-50vh]">
+        <div className="relative z-20">
           <Footer />
         </div>
 

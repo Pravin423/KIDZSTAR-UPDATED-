@@ -124,6 +124,9 @@ export default function About() {
 
         </div>
 
+
+
+
         {/* Footer Section - Appearing after animations */}
         <div className="relative z-20 mt-[-50vh]">
           <Footer />

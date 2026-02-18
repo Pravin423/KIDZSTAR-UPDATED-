@@ -1,36 +1,20 @@
-import { useRef, useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ZoomScroll from "@/components/ZoomScroll";
-import StarryText from "@/components/StarryText";
 import Vision from "@/components/AboutUs/Vision";
-import ScrollRevealText from "@/components/ScrollRevealText";
-import { Inter } from "next/font/google";
+import CreativeSurroundings from "@/components/AboutUs/CreativeSurroundings";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-
-const inter = Inter({ subsets: ["latin"], weight: ["500", "700"] });
 
 export default function About() {
   const { scrollYProgress } = useScroll();
   const [isNavbarActive, setIsNavbarActive] = useState(false);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest > 0.55) {
-      setIsNavbarActive(true);
-    } else {
-      setIsNavbarActive(false);
-    }
+    setIsNavbarActive(latest > 0.3);
   });
-
-  // Custom transforms for the "Creative Surroundings" section
-  // Container: Fade in/out, Mix Blend Mode, White Background
-  // Extended the visible range [0.5, 0.9] to give time for reading the long text
-  const containerOpacity = useTransform(scrollYProgress, [0.5, 0.55, 0.9, 0.95], [0, 1, 1, 0]);
-
-  // Text: Slide In and Out
-  const textX = useTransform(scrollYProgress, [0.5, 0.6, 0.75, 0.8], ["-100%", "0%", "0%", "100%"]);
 
   return (
     <>
@@ -41,27 +25,20 @@ export default function About() {
       <div className="relative bg-[#0D3697]">
         <Navbar className="fixed top-0 left-0 right-0 w-full z-30" disableScrollEffect={!isNavbarActive} />
 
-        {/* Main scroll container to create scrollable height */}
-        <div className="relative h-[400vh] overflow-x-hidden">
+        {/* Scroll container: 300vh for the two fixed zoom animations */}
+        <div className="relative h-[300vh]">
 
           {/* Fixed Background Video */}
           <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute w-auto min-w-full min-h-full max-w-none object-cover"
-            >
+            <video autoPlay loop muted playsInline className="absolute w-auto min-w-full min-h-full max-w-none object-cover">
               <source src="/space.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
             </video>
           </div>
 
-          {/* Animation 1: About Us - Faster zoom out */}
+          {/* Step 1: "About Us" zoom */}
           <ZoomScroll
-            className="z-10 text-white [text-shadow:6px_6px_#808080,5px_5px_#808080,5.5px_5.5px_#808080,5.25px_5.25px_#808080,5.75px_5.75px_#808080,4px_4px_#808080,4.5px_4.5px_#808080,4.25px_4.25px_#808080,4.75px_4.75px_#808080,3px_3px_#808080,3.5px_3.5px_#808080,3.25px_3.25px_#808080,3.75px_3.75px_#808080,2px_2px_#808080,2.5px_2.5px_#808080,2.25px_2.25px_#808080,2.75px_2.75px_#808080,1px_1px_#808080,1.5px_1.5px_#808080,1.25px_1.25px_#808080,1.75px_1.75px_#808080,0.5px_0.5px_#808080,0.25px_0.25px_#808080,0.75px_0.75px_#808080] font-montserrat font-extrabold text-[5rem] uppercase whitespace-nowrap"
-            scrollPoints={[0, 0.15, 0.3]}
+            className="z-10 text-white [text-shadow:6px_6px_#808080,5px_5px_#808080,4px_4px_#808080,3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] font-montserrat font-extrabold text-[5rem] uppercase whitespace-nowrap"
+            scrollPoints={[0, 0.2, 0.4]}
             scaleValues={[1, 2, 100]}
             xValues={["0%", "0%", "3%"]}
             opacityValues={[1, 1, 0]}
@@ -69,87 +46,32 @@ export default function About() {
             About Us
           </ZoomScroll>
 
-          {/* Animation 2: Welcome to Kidzstar - Overlaps and zooms fast */}
+          {/* Step 2: "Welcome to Kidzstar" zoom */}
           <ZoomScroll
-            className="z-10 text-white [text-shadow:6px_6px_#808080,5px_5px_#808080,5.5px_5.5px_#808080,5.25px_5.25px_#808080,5.75px_5.75px_#808080,4px_4px_#808080,4.5px_4.5px_#808080,4.25px_4.25px_#808080,4.75px_4.75px_#808080,3px_3px_#808080,3.5px_3.5px_#808080,3.25px_3.25px_#808080,3.75px_3.75px_#808080,2px_2px_#808080,2.5px_2.5px_#808080,2.25px_2.25px_#808080,2.75px_2.75px_#808080,1px_1px_#808080,1.5px_1.5px_#808080,1.25px_1.25px_#808080,1.75px_1.75px_#808080,0.5px_0.5px_#808080,0.25px_0.25px_#808080,0.75px_0.75px_#808080] font-montserrat font-extrabold text-[5rem] uppercase whitespace-nowrap"
-            scrollPoints={[0.15, 0.35, 0.5]}
+            className="z-10 text-white [text-shadow:6px_6px_#808080,5px_5px_#808080,4px_4px_#808080,3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] font-montserrat font-extrabold text-[5rem] uppercase whitespace-nowrap"
+            scrollPoints={[0.3, 0.6, 0.9]}
             scaleValues={[0, 1, 100]}
             opacityValues={[1, 1, 0]}
           >
             Welcome to Kidzstar
           </ZoomScroll>
 
-          {/* Animation 3: Creative Surroundings - Custom Slide In/Out */}
-          <motion.div
-            style={{ opacity: containerOpacity }}
-            className={`fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-20 mix-blend-screen bg-white text-black font-alfa text-[60px] leading-tight uppercase text-center`}
-          >
-            {/* Rotating Earth Logo */}
-            <motion.div
-              className="absolute bottom-[10%] left-[10%] w-[150px] md:w-[200px]"
-              animate={{ rotate: 360 }}
-              transition={{
-                duration: 20,
-                ease: "linear",
-                repeat: Infinity
-              }}
-            >
-              <Image
-                src="/eathlogo.png"
-                alt="Earth Logo"
-                width={200}
-                height={200}
-                className="object-contain"
-              />
-            </motion.div>
-
-            {/* Floating Saturn Logo */}
-            <motion.div
-              className="absolute top-[15%] right-[15%] w-[120px] md:w-[180px]"
-              animate={{
-                y: [0, -15, 0],
-                rotate: [0, 5, 0, -5, 0]
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              <Image
-                src="/staurnlogo.png"
-                alt="Saturn Logo"
-                width={180}
-                height={120}
-                className="object-contain"
-              />
-            </motion.div>
-
-            <motion.div style={{ x: textX }} className="w-full h-full flex items-center justify-center relative">
-              <StarryText className="w-full h-full">
-                Creative Surroundings<br />to Borderless Future
-              </StarryText>
-            </motion.div>
-          </motion.div>
-
         </div>
 
+        {/* Step 3: Creative Surroundings — normal flow section after fixed animations */}
+        <CreativeSurroundings />
 
-
-
-
-        {/* Vision Section */}
-        <div className="relative z-20">
+        {/* Step 4: Vision */}
+        <div className="relative z-20 bg-white">
           <Vision />
         </div>
 
-        {/* Footer Section - Appearing after animations */}
+        {/* Footer */}
         <div className="relative z-20">
           <Footer />
         </div>
 
       </div>
-
     </>
   );
 }

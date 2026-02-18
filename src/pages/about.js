@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ZoomScroll from "@/components/ZoomScroll";
 import StarryText from "@/components/StarryText";
 import Vision from "@/components/AboutUs/Vision";
+import ScrollRevealText from "@/components/ScrollRevealText";
 import { Inter } from "next/font/google";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 
@@ -25,7 +26,8 @@ export default function About() {
 
   // Custom transforms for the "Creative Surroundings" section
   // Container: Fade in/out, Mix Blend Mode, White Background
-  const containerOpacity = useTransform(scrollYProgress, [0.5, 0.6, 0.75, 0.8], [0, 1, 1, 0]);
+  // Extended the visible range [0.5, 0.9] to give time for reading the long text
+  const containerOpacity = useTransform(scrollYProgress, [0.5, 0.55, 0.9, 0.95], [0, 1, 1, 0]);
 
   // Text: Slide In and Out
   const textX = useTransform(scrollYProgress, [0.5, 0.6, 0.75, 0.8], ["-100%", "0%", "0%", "100%"]);
@@ -127,8 +129,6 @@ export default function About() {
               <StarryText className="w-full h-full">
                 Creative Surroundings<br />to Borderless Future
               </StarryText>
-
-
             </motion.div>
           </motion.div>
 

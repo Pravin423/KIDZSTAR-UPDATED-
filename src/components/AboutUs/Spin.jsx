@@ -23,7 +23,7 @@ export default function SpinningFrame() {
                 alt="outer layer"
                 className="absolute w-auto h-auto -right-5 -top-[15%] opacity-70 scale-105"
                 animate={{ rotate: 360 }}
-                transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
             />
 
             {/* --- Middle rotating SVG layer --- */}
@@ -31,12 +31,10 @@ export default function SpinningFrame() {
                 src="/middle2.png"
                 alt="middle layer"
                 className="absolute w-auto h-auto right-3 top-[1%]"
-                animate={{ rotate: [-90, 90, -90], scale: [1, 1.1, 1], }}
+                animate={{ rotate: [0, 45, -30, 15, 0], scale: [1, 1.05, 1] }}
                 transition={{
-                    duration: 14,
-                    ease: "linear",
-                    times: [0, 0.6, 1],
-                    ease: ["easeOut", "easeIn"],
+                    duration: 25,
+                    ease: "easeInOut",
                     repeat: Infinity,
                 }}
             />
@@ -46,12 +44,10 @@ export default function SpinningFrame() {
                 src="/top.png"
                 alt="inner layer"
                 className="absolute w-auto h-auto top-[8%] left-[6%] z-0 opacity-80"
-                animate={{ rotate: [-90, 90, -90], scale: [1, 1.1, 1], }}
+                animate={{ rotate: -360 }}
                 transition={{
-                    duration: 14,
+                    duration: 50,
                     ease: "linear",
-                    times: [0, 0.6, 1],
-                    ease: ["easeOut", "easeIn"],
                     repeat: Infinity,
                 }}
             />
@@ -59,7 +55,7 @@ export default function SpinningFrame() {
             {/* --- Static center portrait with gentle zoom animation --- */}
             {/* --- Static center portrait with gentle zoom animation --- */}
             <motion.div
-                className="relative z-10 flex items-center justify-center w-[80%] h-auto"
+                className="relative z-10 flex items-center justify-center w-[65%] h-auto"
                 animate={{ scale: [1, 1.08, 1] }}
                 transition={{
                     duration: 15,

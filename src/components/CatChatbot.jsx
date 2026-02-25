@@ -247,21 +247,21 @@ export default function CatChatbot({ isOpen: propsOpen, onClose: propsOnClose, c
             <AnimatePresence>
                 {showPopup && !open && (
                     <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                        initial={{ opacity: 0, y: 10, scale: 0.85 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.8 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.85 }}
                         transition={{ type: "spring", stiffness: 300, damping: 22 }}
                         onClick={() => { setOpen(true); setShowPopup(false); setPopupDismissed(true); }}
                         style={{
                             position: "fixed",
-                            bottom: "210px",
-                            right: "24px",
+                            bottom: "116px",   /* 28px button offset + 72px button height + 16px gap */
+                            right: "20px",
                             zIndex: 9999,
                             background: "linear-gradient(135deg, #00218E, #1a3fa8)",
                             color: "#fff",
-                            borderRadius: "18px 18px 4px 18px",
-                            padding: "12px 18px",
-                            maxWidth: "220px",
+                            borderRadius: "18px 18px 4px 18px",  /* tail points ↘ toward cat */
+                            padding: "12px 16px",
+                            maxWidth: "210px",
                             fontSize: "13px",
                             fontFamily: "Poppins, sans-serif",
                             fontWeight: 600,
@@ -336,34 +336,38 @@ export default function CatChatbot({ isOpen: propsOpen, onClose: propsOnClose, c
                                 <line x1="21" y1="7" x2="7" y2="21" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
                             </svg>
                         ) : (
-                            /* Cat face SVG */
-                            <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                            /* Cat face SVG — animated */
+                            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" className="cat-face-svg">
                                 {/* Left ear */}
-                                <polygon points="4,18 10,4 16,18" fill="#F5C842" />
+                                <polygon points="4,18 10,4 16,18" fill="#F5C842" className="cat-ear-l" />
                                 <polygon points="7,16 10,8 13,16" fill="#FF6D92" />
                                 {/* Right ear */}
-                                <polygon points="28,18 34,4 40,18" fill="#F5C842" />
+                                <polygon points="28,18 34,4 40,18" fill="#F5C842" className="cat-ear-r" />
                                 <polygon points="31,16 34,8 37,16" fill="#FF6D92" />
                                 {/* Head */}
                                 <ellipse cx="22" cy="26" rx="17" ry="15" fill="#F5C842" />
-                                {/* Eyes */}
+                                {/* Eye whites */}
                                 <ellipse cx="15" cy="23" rx="3.5" ry="4" fill="white" />
                                 <ellipse cx="29" cy="23" rx="3.5" ry="4" fill="white" />
-                                <ellipse cx="15.5" cy="23.5" rx="2" ry="2.5" fill="#1a1a2e" />
-                                <ellipse cx="29.5" cy="23.5" rx="2" ry="2.5" fill="#1a1a2e" />
+                                {/* Pupils — look around */}
+                                <ellipse cx="15.5" cy="23.5" rx="2" ry="2.5" fill="#1a1a2e" className="cat-pupil-l" />
+                                <ellipse cx="29.5" cy="23.5" rx="2" ry="2.5" fill="#1a1a2e" className="cat-pupil-r" />
                                 {/* Eye shine */}
-                                <circle cx="16" cy="22" r="0.8" fill="white" />
-                                <circle cx="30" cy="22" r="0.8" fill="white" />
+                                <circle cx="16" cy="22" r="0.8" fill="white" className="cat-shine-l" />
+                                <circle cx="30" cy="22" r="0.8" fill="white" className="cat-shine-r" />
+                                {/* Blink overlays — covers eyes when blinking */}
+                                <ellipse cx="15" cy="23" rx="3.8" ry="4.5" fill="#F5C842" className="cat-blink-l" />
+                                <ellipse cx="29" cy="23" rx="3.8" ry="4.5" fill="#F5C842" className="cat-blink-r" />
                                 {/* Nose */}
                                 <ellipse cx="22" cy="29" rx="2" ry="1.2" fill="#FF6D92" />
                                 {/* Mouth */}
                                 <path d="M19.5 30.5 Q22 33 24.5 30.5" stroke="#c0395d" strokeWidth="1" fill="none" strokeLinecap="round" />
                                 {/* Whiskers left */}
-                                <line x1="5" y1="28" x2="19" y2="29.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
-                                <line x1="5" y1="31" x2="19" y2="30.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
+                                <line x1="5" y1="28" x2="19" y2="29.5" stroke="white" strokeWidth="0.8" opacity="0.8" className="cat-whisker-l" />
+                                <line x1="5" y1="31" x2="19" y2="30.5" stroke="white" strokeWidth="0.8" opacity="0.8" className="cat-whisker-l" />
                                 {/* Whiskers right */}
-                                <line x1="39" y1="28" x2="25" y2="29.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
-                                <line x1="39" y1="31" x2="25" y2="30.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
+                                <line x1="39" y1="28" x2="25" y2="29.5" stroke="white" strokeWidth="0.8" opacity="0.8" className="cat-whisker-r" />
+                                <line x1="39" y1="31" x2="25" y2="30.5" stroke="white" strokeWidth="0.8" opacity="0.8" className="cat-whisker-r" />
                             </svg>
                         )}
                     </motion.div>
@@ -391,6 +395,48 @@ export default function CatChatbot({ isOpen: propsOpen, onClose: propsOnClose, c
                     0%, 100% { transform: scale(1); opacity: 1; }
                     50% { transform: scale(1.4); opacity: 0.6; }
                 }
+                /* Blink: closed most of the time, blinks at 0%, 5%, 50%, 55% */
+                @keyframes catBlink {
+                    0%, 4%   { transform: scaleY(0); }
+                    5%, 49%  { transform: scaleY(1); }
+                    50%, 54% { transform: scaleY(0); }
+                    55%, 100%{ transform: scaleY(1); }
+                }
+                /* Pupils shift left → center → right → center */
+                @keyframes catLookAround {
+                    0%, 20%   { transform: translateX(0px); }
+                    30%, 45%  { transform: translateX(-1.5px); }
+                    55%, 70%  { transform: translateX(1.5px); }
+                    80%, 100% { transform: translateX(0px); }
+                }
+                /* Ear twitch */
+                @keyframes catEarL {
+                    0%, 80%, 100% { transform: rotate(0deg); transform-origin: bottom right; }
+                    85%           { transform: rotate(-8deg); transform-origin: bottom right; }
+                }
+                @keyframes catEarR {
+                    0%, 80%, 100% { transform: rotate(0deg); transform-origin: bottom left; }
+                    85%           { transform: rotate(8deg); transform-origin: bottom left; }
+                }
+                /* Whisker flick */
+                @keyframes catWhiskerL {
+                    0%, 75%, 100% { transform: rotate(0deg); transform-origin: right center; }
+                    80%           { transform: rotate(5deg); transform-origin: right center; }
+                }
+                @keyframes catWhiskerR {
+                    0%, 75%, 100% { transform: rotate(0deg); transform-origin: left center; }
+                    80%           { transform: rotate(-5deg); transform-origin: left center; }
+                }
+                .cat-blink-l  { transform-origin: 15px 23px; animation: catBlink 4s ease-in-out infinite; }
+                .cat-blink-r  { transform-origin: 29px 23px; animation: catBlink 4s ease-in-out infinite; }
+                .cat-pupil-l  { animation: catLookAround 5s ease-in-out infinite; }
+                .cat-pupil-r  { animation: catLookAround 5s ease-in-out infinite; }
+                .cat-shine-l  { animation: catLookAround 5s ease-in-out infinite; }
+                .cat-shine-r  { animation: catLookAround 5s ease-in-out infinite; }
+                .cat-ear-l    { animation: catEarL 4s ease-in-out infinite; }
+                .cat-ear-r    { animation: catEarR 4s ease-in-out infinite; }
+                .cat-whisker-l{ animation: catWhiskerL 4s ease-in-out infinite; }
+                .cat-whisker-r{ animation: catWhiskerR 4s ease-in-out infinite; }
             `}</style>
 
 

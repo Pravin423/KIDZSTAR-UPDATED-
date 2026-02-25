@@ -155,7 +155,7 @@ const Details = () => {
                     alt="kid"
                     width={209}
                     height={333}
-                    className="object-contain mt-[298px] ml-[100px]"
+                    className="object-contain mt-[630px] ml-[100px]"
                 />
 
                 {/* 4-column card grid */}

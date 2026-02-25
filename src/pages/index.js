@@ -31,8 +31,7 @@ export default function Home() {
         {/* Details — no negative margin on mobile; cloud 10px tail connects naturally */}
         <div className="mt-0 md:mt-[-190px]">
           <Details />
-        </div>\
-        
+        </div>
         <div className="relative z-20 bg-white">
           <PhotoGallery />
         </div>

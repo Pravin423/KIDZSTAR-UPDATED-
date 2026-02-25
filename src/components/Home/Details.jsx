@@ -104,9 +104,7 @@ const Details = () => {
                 </div>
             </div>
 
-            {/* ══════════════════════════════════════════
-                DESKTOP: original layout, unchanged
-            ══════════════════════════════════════════ */}
+
             <div
                 ref={containerRef}
                 className="hidden md:flex w-full h-[950px] bg-[#ACD8FA] items-center justify-center overflow-hidden"
@@ -118,7 +116,7 @@ const Details = () => {
                     alt="kid"
                     width={209}
                     height={333}
-                    className="object-contain mt-[590px] ml-[100px]"
+                    className="object-contain mt-[298px] ml-[100px]"
                 />
 
                 {/* 4-column card grid */}

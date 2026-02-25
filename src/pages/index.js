@@ -22,15 +22,18 @@ export default function Home() {
         <div  >
           <WelcomeBanner />
         </div>
-        <div className="mt-[-160px]">
+        {/* Cloud — desktop only */}
+        <div className="hidden md:block md:mt-[-160px]">
           <Cloud />
-
         </div>
-        <div className="mt-[-190px]">
+
+        {/* Details — no negative margin on mobile; cloud 10px tail connects naturally */}
+        <div className="mt-0 md:mt-[-190px]">
           <Details />
         </div>
 
-        <div className="mt-[-160px]">
+        {/* Footer */}
+        <div className="mt-4 md:mt-[-160px]">
           <Footer />
         </div>
 

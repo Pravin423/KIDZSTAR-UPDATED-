@@ -29,7 +29,7 @@ export default function Home() {
         <div className="mt-[-190px]">
           <Details />
         </div>
-       
+
         <div className="mt-[-160px]">
           <Footer />
         </div>

@@ -128,22 +128,22 @@ const Details = () => {
                             key={`desk-${index}`}
                             ref={el => childrenRef.current[index] = el}
                             className={`perspective-1000 w-[272px] h-[242px] self-start ${child.mt}`}
+                            onMouseEnter={() => {
+                                if (isAnimatingDesktop.current[index]) return;
+                                gsap.to(desktopCardsRef.current[index], {
+                                    rotateY: 180, duration: 0.6, ease: "power2.out"
+                                });
+                            }}
+                            onMouseLeave={() => {
+                                if (isAnimatingDesktop.current[index]) return;
+                                gsap.to(desktopCardsRef.current[index], {
+                                    rotateY: 0, duration: 0.6, ease: "power2.out"
+                                });
+                            }}
                         >
                             <div
                                 ref={el => desktopCardsRef.current[index] = el}
                                 className="relative w-full h-full preserve-3d cursor-pointer"
-                                onMouseEnter={() => {
-                                    if (isAnimatingDesktop.current[index]) return;
-                                    gsap.to(desktopCardsRef.current[index], {
-                                        rotateY: 180, duration: 0.6, ease: "power2.out"
-                                    });
-                                }}
-                                onMouseLeave={() => {
-                                    if (isAnimatingDesktop.current[index]) return;
-                                    gsap.to(desktopCardsRef.current[index], {
-                                        rotateY: 0, duration: 0.6, ease: "power2.out"
-                                    });
-                                }}
                             >
                                 {/* Front */}
                                 <div className="absolute inset-0 backface-hidden">

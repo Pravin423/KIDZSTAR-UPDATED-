@@ -41,7 +41,7 @@ const EnquiryForm = ({
     <div>
       {isShortForm ? (
         /* UI 1: Short Form (e.g., for Sidebar or Footer) */
-        <div className={`${poppins.className} ml-[30px] p-6 rounded-2xl max-w-[450px]`}>
+        <div className={`${poppins.className} w-full p-4 rounded-2xl`}>
           {submitted ? (
             <p className="text-green-300 font-medium">Thanks! We'll call you soon.</p>
           ) : (
@@ -54,23 +54,27 @@ const EnquiryForm = ({
                 className="w-full bg-white/20 border border-white/30 p-2 rounded-lg text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-400" required />
               <input name="phone" placeholder="Phone Number" onChange={handleChange}
                 className="w-full bg-white/20 border border-white/30 p-2 rounded-lg text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-400" required />
-              <button type="submit" className="relative w-full h-[56px] flex items-center justify-center cursor-pointer group">
-                <Image
-                  src="/greenbutton.png"
-                  alt="Submit Button"
-                  fill
-                  className="object-contain pointer-events-none"
-                />
-                <div className="absolute inset-0 flex items-center justify-center gap-2">
-                  <span className={`${poppins.className} text-lg md:text-[14px] font-bold text-white`}>
-                    Get a Call Back
-                  </span>
-                  <ChevronsRight
-                    size={28}
-                    className="text-white transition-transform duration-300 group-hover:translate-x-1"
+
+              {/* Button — explicit sizing so it works on both mobile and desktop */}
+              <div className="flex justify-center pt-1">
+                <button type="submit" className="relative w-[200px] h-[56px] flex items-center justify-center cursor-pointer group">
+                  <Image
+                    src="/greenbutton.png"
+                    alt="Submit Button"
+                    fill
+                    className="object-contain pointer-events-none"
                   />
-                </div>
-              </button>
+                  <div className="absolute inset-0 flex items-center justify-center gap-1">
+                    <span className={`${poppins.className} text-[14px] font-bold text-white`}>
+                      Get a Call Back
+                    </span>
+                    <ChevronsRight
+                      size={20}
+                      className="text-white transition-transform duration-300 group-hover:translate-x-1"
+                    />
+                  </div>
+                </button>
+              </div>
             </form>
           )}
         </div>

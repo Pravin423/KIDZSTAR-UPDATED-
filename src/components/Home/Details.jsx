@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Details = () => {
     const containerRef = useRef(null);
     const binoRef = useRef(null);
+    const mobileContainerRef = useRef(null);  // for IntersectionObserver
 
     // Separate refs for scroll trigger targets and desktop / mobile card elements
     const childrenRef = useRef([]);       // desktop scroll trigger anchors
@@ -60,12 +61,50 @@ const Details = () => {
         });
     }, []);
 
+    // Mobile: flip each card once (staggered) when the section enters the viewport
+    useEffect(() => {
+        const container = mobileContainerRef.current;
+        if (!container) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    observer.disconnect(); // fire only once
+
+                    cards.forEach((_, index) => {
+                        setTimeout(() => {
+                            const card = mobileCardsRef.current[index];
+                            if (!card || isAnimatingMobile.current[index]) return;
+                            isAnimatingMobile.current[index] = true;
+
+                            gsap.to(card, {
+                                rotateY: 180, duration: 0.5, ease: "power2.out",
+                                onComplete: () => {
+                                    gsap.to(card, {
+                                        rotateY: 0, duration: 0.5, ease: "power2.out", delay: 0.6,
+                                        onComplete: () => { isAnimatingMobile.current[index] = false; }
+                                    });
+                                }
+                            });
+                        }, index * 300); // 300ms stagger between cards
+                    });
+                });
+            },
+            { threshold: 0.3 } // trigger when 30% of section is visible
+        );
+
+        observer.observe(container);
+        return () => observer.disconnect();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             {/* ══════════════════════════════════════════
                 MOBILE: 2×2 grid, tap-to-flip, no fixed heights
             ══════════════════════════════════════════ */}
-            <div className="md:hidden w-full bg-[#ACD8FA] py-10 px-6">
+            <div ref={mobileContainerRef} className="md:hidden w-full bg-[#ACD8FA] py-10 px-6">
                 <div className="grid grid-cols-2 gap-5 w-full max-w-sm mx-auto">
                     {cards.map((child, index) => (
                         <div

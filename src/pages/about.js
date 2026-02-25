@@ -81,8 +81,8 @@ export default function About() {
       <div className="relative bg-[#0D3697]">
         <Navbar className="fixed top-0 left-0 right-0 w-full z-30" disableScrollEffect={!isNavbarActive} />
 
-        {/* Scroll container: 1000vh for the two fixed zoom animations */}
-        <div className="relative h-[1000vh]">
+        {/* Scroll container — ZoomScroll animations for all screens */}
+        <div className="relative h-[500vh] overflow-x-hidden">
 
           {/* Fixed Background Video */}
           <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
@@ -93,8 +93,8 @@ export default function About() {
 
           {/* Step 1: "About Us" zoom */}
           <ZoomScroll
-            className="z-10 text-white [text-shadow:6px_6px_#808080,5px_5px_#808080,4px_4px_#808080,3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] font-montserrat font-extrabold text-[5rem] uppercase whitespace-nowrap"
-            scrollPoints={[0, 0.15, 0.25]}
+            className="z-10 text-white [text-shadow:3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] md:[text-shadow:6px_6px_#808080,5px_5px_#808080,4px_4px_#808080,3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] font-montserrat font-extrabold text-[2.2rem] md:text-[5rem] uppercase md:whitespace-nowrap"
+            scrollPoints={[0, 0.1, 0.18]}
             scaleValues={[1, 1, 50]}
             xValues={["0%", "0%", "3%"]}
             opacityValues={[1, 1, 0]}
@@ -104,8 +104,8 @@ export default function About() {
 
           {/* Step 2: "Welcome to Kidzstar" zoom */}
           <ZoomScroll
-            className="z-10 text-white [text-shadow:6px_6px_#808080,5px_5px_#808080,4px_4px_#808080,3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] font-montserrat font-extrabold text-[5rem] uppercase whitespace-nowrap"
-            scrollPoints={[0.3, 0.4, 0.75, 0.85]}
+            className="z-10 text-white [text-shadow:3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] md:[text-shadow:6px_6px_#808080,5px_5px_#808080,4px_4px_#808080,3px_3px_#808080,2px_2px_#808080,1px_1px_#808080] font-montserrat font-extrabold text-[1.6rem] md:text-[5rem] uppercase md:whitespace-nowrap text-center px-4 md:px-0"
+            scrollPoints={[0.2, 0.28, 0.58, 0.68]}
             scaleValues={[0, 1, 1, 50]}
             opacityValues={[0, 1, 1, 0]}
           >
@@ -139,63 +139,9 @@ export default function About() {
           <Footer />
         </div>
 
-        {/* ── Chatbot linked to Scroll Cat ── */}
-        <CatChatbot
-          isOpen={chatOpen}
-          onClose={() => setChatOpen(false)}
-          customTrigger={true}
-        />
+       
 
-        {/* ── Scroll-driven cat — visible from Creative through Curriculum ── */}
-        {catVisible && (
-          <motion.div
-            style={{
-              position: "fixed",
-              right: "32px",
-              top: catLanded ? "auto" : 0,
-              bottom: catLanded ? "20px" : "auto",
-              y: catLanded ? 0 : catY,
-              scale: catScale,
-              opacity: 1,
-              zIndex: 50,
-              cursor: "pointer",
-              pointerEvents: "auto",
-              fontSize: "0.55vmin",
-              width: "90em",
-              aspectRatio: "1",
-              transformOrigin: catLanded ? "bottom right" : "top right",
-              animation: catLanded ? "scrollCatFloat 4s ease-in-out infinite" : "none",
-            }}
-            onClick={() => setChatOpen(true)}
-          >
-            {/* Moon */}
-            <div style={{
-              position: "absolute",
-              width: "120%",
-              height: "40%",
-              left: "50%",
-              bottom: 0,
-              translate: "-50% 60%",
-              borderRadius: "50% / 100% 100% 0 0",
-              boxShadow: "0 0 3em #ffc, 0 0 9em #ffc8",
-              background: "radial-gradient(at 38% 20%, #0001 2%, #0000 0), radial-gradient(13% 8% at 50% 0, #0001 99%, #0000), #ffc",
-            }} />
-
-            {/* Cat */}
-            <div className="scroll-cat">
-              <div className="scroll-cat-tail" />
-              <div className="scroll-cat-body" />
-              <div className="scroll-cat-ear" />
-              <div className="scroll-cat-ear scroll-cat-ear-r" />
-              <div className="scroll-cat-head">
-                <div className="scroll-cat-eye" />
-                <div className="scroll-cat-eye scroll-cat-eye-r" />
-                <div className="scroll-cat-nose" />
-              </div>
-            </div>
-          </motion.div>
-        )}
-
+       
       </div>
 
       <style jsx global>{`

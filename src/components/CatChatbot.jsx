@@ -283,8 +283,9 @@ export default function CatChatbot({ isOpen: propsOpen, onClose: propsOnClose, c
             {!customTrigger && (
                 <motion.div
                     onClick={() => { setOpen(o => !o); setShowPopup(false); setPopupDismissed(true); }}
-                    whileHover={{ scale: 1.12 }}
-                    whileTap={{ scale: 0.92 }}
+                    whileTap={{ scale: 0.88 }}
+                    animate={open ? {} : { y: [0, -8, 0] }}
+                    transition={open ? {} : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                     style={{
                         position: "fixed",
                         bottom: "28px",
@@ -293,22 +294,105 @@ export default function CatChatbot({ isOpen: propsOpen, onClose: propsOnClose, c
                         cursor: "pointer",
                         width: "72px",
                         height: "72px",
-                        borderRadius: "50%",
-                        background: "linear-gradient(135deg, #00218E 0%, #1a3fa8 100%)",
-                        boxShadow: open
-                            ? "0 0 0 4px #F5C842, 0 8px 32px rgba(0,33,142,0.4)"
-                            : "0 4px 24px rgba(0,33,142,0.35)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "36px",
-                        transition: "box-shadow 0.3s",
                         userSelect: "none",
                     }}
                 >
-                    {open ? "✕" : "🐱"}
+                    {/* Rotating glow ring */}
+                    {!open && (
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                            style={{
+                                position: "absolute",
+                                inset: "-5px",
+                                borderRadius: "50%",
+                                background: "conic-gradient(from 0deg, #F5C842, #FF6D92, #00218E, #F5C842)",
+                                opacity: 0.85,
+                            }}
+                        />
+                    )}
+
+                    {/* Button face */}
+                    <motion.div
+                        animate={open ? {} : { boxShadow: ["0 4px 24px rgba(0,33,142,0.4)", "0 4px 32px rgba(245,200,66,0.6)", "0 4px 24px rgba(0,33,142,0.4)"] }}
+                        transition={open ? {} : { duration: 2.4, repeat: Infinity }}
+                        style={{
+                            position: "absolute",
+                            inset: "3px",
+                            borderRadius: "50%",
+                            background: open
+                                ? "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)"
+                                : "linear-gradient(135deg, #00218E 0%, #1a3fa8 50%, #003aba 100%)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transition: "background 0.3s",
+                        }}
+                    >
+                        {open ? (
+                            /* Close X */
+                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                                <line x1="7" y1="7" x2="21" y2="21" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                                <line x1="21" y1="7" x2="7" y2="21" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                            </svg>
+                        ) : (
+                            /* Cat face SVG */
+                            <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                                {/* Left ear */}
+                                <polygon points="4,18 10,4 16,18" fill="#F5C842" />
+                                <polygon points="7,16 10,8 13,16" fill="#FF6D92" />
+                                {/* Right ear */}
+                                <polygon points="28,18 34,4 40,18" fill="#F5C842" />
+                                <polygon points="31,16 34,8 37,16" fill="#FF6D92" />
+                                {/* Head */}
+                                <ellipse cx="22" cy="26" rx="17" ry="15" fill="#F5C842" />
+                                {/* Eyes */}
+                                <ellipse cx="15" cy="23" rx="3.5" ry="4" fill="white" />
+                                <ellipse cx="29" cy="23" rx="3.5" ry="4" fill="white" />
+                                <ellipse cx="15.5" cy="23.5" rx="2" ry="2.5" fill="#1a1a2e" />
+                                <ellipse cx="29.5" cy="23.5" rx="2" ry="2.5" fill="#1a1a2e" />
+                                {/* Eye shine */}
+                                <circle cx="16" cy="22" r="0.8" fill="white" />
+                                <circle cx="30" cy="22" r="0.8" fill="white" />
+                                {/* Nose */}
+                                <ellipse cx="22" cy="29" rx="2" ry="1.2" fill="#FF6D92" />
+                                {/* Mouth */}
+                                <path d="M19.5 30.5 Q22 33 24.5 30.5" stroke="#c0395d" strokeWidth="1" fill="none" strokeLinecap="round" />
+                                {/* Whiskers left */}
+                                <line x1="5" y1="28" x2="19" y2="29.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
+                                <line x1="5" y1="31" x2="19" y2="30.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
+                                {/* Whiskers right */}
+                                <line x1="39" y1="28" x2="25" y2="29.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
+                                <line x1="39" y1="31" x2="25" y2="30.5" stroke="white" strokeWidth="0.8" opacity="0.8" />
+                            </svg>
+                        )}
+                    </motion.div>
+
+                    {/* Pulse ping dot */}
+                    {!open && (
+                        <span style={{
+                            position: "absolute",
+                            top: "4px",
+                            right: "4px",
+                            width: "14px",
+                            height: "14px",
+                            borderRadius: "50%",
+                            background: "#22c55e",
+                            border: "2px solid white",
+                            zIndex: 1,
+                            animation: "chatPing 1.5s ease-in-out infinite",
+                        }} />
+                    )}
                 </motion.div>
             )}
+
+            <style>{`
+                @keyframes chatPing {
+                    0%, 100% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.4); opacity: 0.6; }
+                }
+            `}</style>
+
 
             {/* ── Chat window ── */}
             <AnimatePresence>

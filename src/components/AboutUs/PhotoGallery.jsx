@@ -8,11 +8,47 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const PICTURES = 12;
+const PICTURES = 8;
 const HOVER_ZONES = 9;
 
 export default function PhotoGallery() {
   const [images, setImages] = useState([]);
+  const [autoP, setAutoP] = useState(null);
+  const [autoZ, setAutoZ] = useState(null);
+  const [autoClicked, setAutoClicked] = useState(null);
+
+  const startMobileAnim = () => {
+    // Only run on mobile/tablet devices
+    if (window.innerWidth > 1024) return;
+
+    let currentP = 1;
+    const waveInterval = setInterval(() => {
+      setAutoP(currentP);
+      setAutoZ(5); // Simulate hovering exactly the middle sub-zone
+      currentP++;
+
+      if (currentP > PICTURES) {
+        clearInterval(waveInterval);
+
+        // Pick the middle image to "auto click"
+        const clickTarget = Math.ceil(PICTURES / 2);
+
+        // Wait a small beat before expanding it
+        setTimeout(() => {
+          setAutoP(clickTarget);
+          setAutoZ(5);
+          setAutoClicked(clickTarget);
+
+          // Close it back down after 2 seconds
+          setTimeout(() => {
+            setAutoP(null);
+            setAutoZ(null);
+            setAutoClicked(null);
+          }, 2000);
+        }, 300);
+      }
+    }, 100); // 100ms per image ripple
+  };
 
   useEffect(() => {
     fetch("/api/gallery?page=1&limit=12")
@@ -38,7 +74,11 @@ export default function PhotoGallery() {
     : Array.from({ length: PICTURES }, (_, i) => `https://picsum.photos/seed/kidzt${i + 5}/800/600`);
 
   return (
-    <section className={`w-full py-24 bg-white overflow-hidden relative ${poppins.className}`}>
+    <motion.section
+      onViewportEnter={startMobileAnim}
+      viewport={{ once: true, amount: 0.3 }}
+      className={`w-full py-24 bg-white overflow-hidden relative ${poppins.className}`}
+    >
       {/* Section Header */}
       <div className="max-w-7xl mx-auto px-4 mb-20 text-center">
         <motion.div
@@ -51,7 +91,7 @@ export default function PhotoGallery() {
             <h2 className="text-sm md:text-base font-semibold  tracking-[0.2em] uppercase text-black">
               OUR GALLERY
             </h2>
-           
+
           </div>
         </motion.div>
         <p className="text-slate-500 text-sm max-w-xl mx-auto leading-relaxed">
@@ -66,6 +106,8 @@ export default function PhotoGallery() {
           style={{
             "--max-p": PICTURES,
             "--max-z": HOVER_ZONES,
+            ...(autoP !== null ? { "--p": autoP } : {}),
+            ...(autoZ !== null ? { "--z": autoZ } : {}),
           }}
         >
           {displayImages.map((url, i) => (
@@ -73,7 +115,7 @@ export default function PhotoGallery() {
               key={i}
               href="#"
               onClick={(e) => e.preventDefault()}
-              className="photo-item"
+              className={`photo-item ${autoClicked === i + 1 ? "auto-expanded" : ""}`}
               style={{
                 "--i": i,
                 "--img": `url('${url}')`,
@@ -103,8 +145,8 @@ export default function PhotoGallery() {
           );
           
           /* BIGGER SIZES: block-size is height, inline-size is width */
-          block-size: clamp(300px, 60vh, 500px);
-          inline-size: min(100%, 1400px);
+          height: clamp(300px, 60vh, 500px);
+          width: min(100%, 1400px);
 
           display: flex;
           align-items: flex-end;
@@ -117,16 +159,27 @@ export default function PhotoGallery() {
 
         @media (max-width: 1024px) {
            .photo-nav {
-              block-size: min(100vw, 800px);
-              inline-size: min(100%, 350px);
-              writing-mode: sideways-rl;
+              flex-direction: column;
+              height: clamp(500px, 75vh, 900px);
+              width: min(100%, 600px);
               --dir: -90deg;
+           }
+           .photo-nav > a.photo-item {
+              height: auto;
+              width: 100%;
+           }
+           .hover-zone {
+              flex-direction: column;
+           }
+           .photo-img {
+              margin-inline: 0;
+              margin-block: 0.15em;
            }
         }
 
         .photo-nav > a.photo-item {  
           flex: 1;
-          block-size: 100%;
+          height: 100%;
           position: relative;
           display: flex;
           justify-content: center;
@@ -219,7 +272,8 @@ export default function PhotoGallery() {
         
         /* Expand the card dynamically */
         .photo-nav:has(.hover-zone:hover):not(:has(i:hover)) a.photo-item:hover, 
-        .photo-nav:has(a.photo-item:focus-visible) a.photo-item:focus-visible {
+        .photo-nav:has(a.photo-item:focus-visible) a.photo-item:focus-visible,
+        .photo-nav > a.photo-item.auto-expanded {
           flex: 4;
         }
 
@@ -252,6 +306,6 @@ export default function PhotoGallery() {
         .photo-nav:has(.hover-zone i:nth-child(8):hover) {--z: 8;}
         .photo-nav:has(.hover-zone i:nth-child(9):hover) {--z: 9;}
       ` }} />
-    </section>
+    </motion.section>
   );
 }

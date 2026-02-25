@@ -25,13 +25,13 @@ const Footer = () => {
           />
         </div>
 
-       <div
+        <div
           className="mr-[20px]  w-[695px] h-[471px] bg-[url('/yellowsvg.png')] bg-contain bg-no-repeat bg-center"
           aria-label="Yellow background decoration"
         >
           <div className='ml-[100px] mt-[40px]'>
             <p className={`${poppins.className} ml-[120px] text-[#FF6D92] text-[16px] font-bold mb-1`}>
-             Book Your Free Trial Class Now!
+              Book Your Free Trial Class Now!
             </p>
 
             <Image className='ml-[130px]' src="/contactus.png" width={245} height={58} />

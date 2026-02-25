@@ -58,12 +58,12 @@ const EnquiryForm = ({
                 <Image
                   src="/greenbutton.png"
                   alt="Submit Button"
-                 fill
+                  fill
                   className="object-contain pointer-events-none"
                 />
                 <div className="absolute inset-0 flex items-center justify-center gap-2">
                   <span className={`${poppins.className} text-lg md:text-[14px] font-bold text-white`}>
-                   Get a Call Back
+                    Get a Call Back
                   </span>
                   <ChevronsRight
                     size={28}

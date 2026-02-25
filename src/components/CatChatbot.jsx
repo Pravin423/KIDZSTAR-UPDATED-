@@ -15,14 +15,20 @@ const ROUTES = {
 
 // ── Conversation flow steps ────────────────────────────────────────────────
 const STEPS = [
+    // ── Welcome ──────────────────────────────────────────────────────────────
     {
-        id: "welcome", bot: "Meow! 🐾 I'm Kidzstar's little helper! What would you like to do?", type: "menu",
+        id: "welcome", bot: "Meow! 🐾 I'm Kidzstar's little helper!\nHow can I assist you today?", type: "menu",
         options: [
             { label: "📋 Admission Enquiry", next: "childName" },
+            { label: "🎓 Find Right Program", next: "ageCheck" },
             { label: "📍 Navigate to a page", next: "navigate" },
+            { label: "❓ FAQs", next: "faq" },
             { label: "📞 Contact info", next: "contactInfo" },
+            { label: "💬 Leave Feedback", next: "feedbackIntro" },
         ]
     },
+
+    // ── Navigation ───────────────────────────────────────────────────────────
     {
         id: "navigate", bot: "Sure! Where would you like to go?", type: "menu",
         options: [
@@ -34,13 +40,151 @@ const STEPS = [
             { label: "🖼️ Gallery", action: "nav", route: "/gallery" },
         ]
     },
+
+    // ── Contact Info ─────────────────────────────────────────────────────────
     {
-        id: "contactInfo", bot: "📞 Phone: +91 9876543210\n📧 Email: info@kidzstar.com\n📍 Address: Kidzstar Preschool, Your City\n\nWould you like to do anything else?", type: "menu",
+        id: "contactInfo", bot: "📞 Phone: +91 9876543210\n📧 Email: info@kidzstar.com\n📍 Address: Kidzstar Preschool, Your City\n🕐 Mon–Sat: 8:00 AM – 1:00 PM\n\nWould you like to do anything else?", type: "menu",
         options: [
             { label: "📋 Start Enquiry", next: "childName" },
-            { label: "👋 That's all, thanks!", next: "bye" },
+            { label: "� Main Menu", next: "welcome" },
+            { label: "�👋 That's all, thanks!", next: "bye" },
         ]
     },
+
+    // ── FAQs ─────────────────────────────────────────────────────────────────
+    {
+        id: "faq", bot: "Great question! What would you like to know?", type: "menu",
+        options: [
+            { label: "⏰ School Timings", next: "faqTimings" },
+            { label: "💰 Fee Structure", next: "faqFees" },
+            { label: "🚌 Transport Facility", next: "faqTransport" },
+            { label: "🏫 School Facilities", next: "faqFacilities" },
+            { label: "📖 Curriculum Approach", next: "faqCurriculum" },
+            { label: "🔙 Main Menu", next: "welcome" },
+        ]
+    },
+    {
+        id: "faqTimings", bot: "⏰ School Timings:\n\n🌅 Morning Batch: 8:00 AM – 11:00 AM\n☀️ Full Day: 8:00 AM – 1:00 PM\n📅 Days: Monday to Saturday\n🏖️ Vacation: As per school calendar\n\nWould you like to know more?", type: "menu",
+        options: [
+            { label: "💰 Check Fee Structure", next: "faqFees" },
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "🔙 Back to FAQs", next: "faq" },
+        ]
+    },
+    {
+        id: "faqFees", bot: "💰 Fee Structure (Approx):\n\n🌱 Playgroup: ₹25,000/year\n🌼 Nursery: ₹28,000/year\n⭐ Junior KG: ₹32,000/year\n🏆 Senior KG: ₹35,000/year\n\n✅ Includes: Activity kit, meals & transport\n📞 Call us for exact current rates!", type: "menu",
+        options: [
+            { label: "🎓 Find My Child's Program", next: "ageCheck" },
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "🔙 Back to FAQs", next: "faq" },
+        ]
+    },
+    {
+        id: "faqTransport", bot: "🚌 Transport Facility:\n\n✅ Available for all areas in the city\n🚐 AC buses with trained staff\n👩‍⚕️ Female attendant on every bus\n📍 Door-to-door pickup & drop\n📞 Contact us to check your area!", type: "menu",
+        options: [
+            { label: "📞 Get Contact Info", next: "contactInfo" },
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "🔙 Back to FAQs", next: "faq" },
+        ]
+    },
+    {
+        id: "faqFacilities", bot: "🏫 Our Facilities:\n\n🎨 Art & Craft Room\n📚 Library Corner\n🖥️ Smart Classroom\n🌳 Outdoor Play Area\n🍱 Hygienic Meal Service\n💻 Computer Lab\n🏥 First Aid Room\n📷 CCTV Surveillance", type: "menu",
+        options: [
+            { label: "🎓 Find Right Program", next: "ageCheck" },
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "🔙 Back to FAQs", next: "faq" },
+        ]
+    },
+    {
+        id: "faqCurriculum", bot: "📖 Our Curriculum:\n\n🌟 Play-based learning approach\n🔢 Early numeracy & literacy\n🎵 Music, dance & drama\n🌍 Environmental awareness\n🤝 Social-emotional learning\n🔬 Activity-based STEM concepts\n\nBalanced between structured learning & free play!", type: "menu",
+        options: [
+            { label: "🖼️ View Gallery", action: "nav", route: "/gallery" },
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "🔙 Back to FAQs", next: "faq" },
+        ]
+    },
+
+    // ── Age-based Program Recommender ────────────────────────────────────────
+    {
+        id: "ageCheck", bot: "Let me help find the perfect program! 🎯\n\nHow old is your child?", type: "menu",
+        options: [
+            { label: "👶 Under 2.5 years", next: "ageTooYoung" },
+            { label: "🌱 2.5 – 3.5 years", next: "recommendPlaygroup" },
+            { label: "🌼 3.5 – 4.5 years", next: "recommendNursery" },
+            { label: "⭐ 4.5 – 5.5 years", next: "recommendJrKG" },
+            { label: "🏆 5.5 – 6.5 years", next: "recommendSrKG" },
+            { label: "📅 Over 6.5 years", next: "ageTooOld" },
+        ]
+    },
+    {
+        id: "ageTooYoung", bot: "😊 Your little one is still very young! We recommend waiting until 2.5 years for our Playgroup.\n\nWe'd love to welcome them when they're ready! Want to register your interest early?", type: "menu",
+        options: [
+            { label: "📋 Register Interest Early", next: "childName" },
+            { label: "🔙 Main Menu", next: "welcome" },
+        ]
+    },
+    {
+        id: "recommendPlaygroup", bot: "🌱 Perfect match: PLAYGROUP!\n\nAge: 2.5 – 3.5 years\n📅 Duration: 1 year\n🎯 Focus: Socialisation, motor skills, creativity\n💰 Fee: ~₹25,000/year\n⏰ Timing: 8:00 AM – 11:00 AM\n\nWould you like to enrol?", type: "menu",
+        options: [
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "💰 Fee Details", next: "faqFees" },
+            { label: "🔙 Main Menu", next: "welcome" },
+        ]
+    },
+    {
+        id: "recommendNursery", bot: "🌼 Perfect match: NURSERY!\n\nAge: 3.5 – 4.5 years\n📅 Duration: 1 year\n🎯 Focus: Language, numbers, creative play\n💰 Fee: ~₹28,000/year\n⏰ Timing: 8:00 AM – 1:00 PM\n\nWould you like to enrol?", type: "menu",
+        options: [
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "💰 Fee Details", next: "faqFees" },
+            { label: "🔙 Main Menu", next: "welcome" },
+        ]
+    },
+    {
+        id: "recommendJrKG", bot: "⭐ Perfect match: JUNIOR KG!\n\nAge: 4.5 – 5.5 years\n📅 Duration: 1 year\n🎯 Focus: Reading readiness, basic maths, science exploration\n💰 Fee: ~₹32,000/year\n⏰ Timing: 8:00 AM – 1:00 PM\n\nWould you like to enrol?", type: "menu",
+        options: [
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "💰 Fee Details", next: "faqFees" },
+            { label: "🔙 Main Menu", next: "welcome" },
+        ]
+    },
+    {
+        id: "recommendSrKG", bot: "🏆 Perfect match: SENIOR KG!\n\nAge: 5.5 – 6.5 years\n📅 Duration: 1 year\n🎯 Focus: School readiness, advanced literacy & numeracy\n💰 Fee: ~₹35,000/year\n⏰ Timing: 8:00 AM – 1:00 PM\n\nWould you like to enrol?", type: "menu",
+        options: [
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "💰 Fee Details", next: "faqFees" },
+            { label: "🔙 Main Menu", next: "welcome" },
+        ]
+    },
+    {
+        id: "ageTooOld", bot: "🎒 Your child may be ready for primary school! Kidzstar caters up to 6.5 years.\n\nWe'd recommend checking local primary schools for Class 1. However, do call us — we may have a suitable solution!\n\n📞 +91 9876543210", type: "menu",
+        options: [
+            { label: "📞 Get Contact Info", next: "contactInfo" },
+            { label: "🔙 Main Menu", next: "welcome" },
+        ]
+    },
+
+    // ── Feedback ─────────────────────────────────────────────────────────────
+    {
+        id: "feedbackIntro", bot: "We love hearing from you! 💛\n\nHow would you rate your overall experience with Kidzstar?", type: "menu",
+        options: [
+            { label: "⭐⭐⭐⭐⭐ Excellent!", next: "feedbackComment", value: "5" },
+            { label: "⭐⭐⭐⭐ Very Good", next: "feedbackComment", value: "4" },
+            { label: "⭐⭐⭐ Good", next: "feedbackComment", value: "3" },
+            { label: "⭐⭐ Needs Improvement", next: "feedbackComment", value: "2" },
+            { label: "⭐ Poor", next: "feedbackComment", value: "1" },
+        ]
+    },
+    { id: "feedbackComment", bot: "Thank you for the rating! 🙏\n\nWould you like to share any specific feedback or suggestion?", type: "input", field: "feedback", next: "feedbackDone", validate: () => null },
+    {
+        id: "feedbackDone", bot: "🎉 Thank you so much for your feedback!\nIt helps us improve and serve you better. 💛\n\nIs there anything else I can help you with?", type: "menu",
+        options: [
+            { label: "📋 Start Admission", next: "childName" },
+            { label: "🔙 Main Menu", next: "welcome" },
+            { label: "👋 That's all!", next: "bye" },
+        ]
+    },
+
+    // ── Admission flow ───────────────────────────────────────────────────────
     { id: "childName", bot: "Great! Let's get your enquiry started 🌟\n\nWhat is your child's name?", type: "input", field: "childName", next: "parentName", validate: v => v.trim().length >= 2 ? null : "Please enter at least 2 characters." },
     { id: "parentName", bot: "Lovely! And your name (parent/guardian)?", type: "input", field: "parentName", next: "phone", validate: v => v.trim().length >= 2 ? null : "Please enter your name." },
     { id: "phone", bot: "What's the best phone number to reach you?", type: "input", field: "phone", next: "email", validate: v => /^[6-9]\d{9}$/.test(v.trim()) ? null : "Please enter a valid 10-digit Indian mobile number." },
@@ -58,7 +202,7 @@ const STEPS = [
     { id: "confirm", bot: null, type: "confirm" },
     { id: "submitting", bot: "Submitting your enquiry... ✨", type: "loading" },
     {
-        id: "success", bot: "🎉 Enquiry submitted successfully!\n\nWe'll get back to you within 24 hours. Thank you for choosing Kidzstar! 🌟", type: "menu",
+        id: "success", bot: "🎉 Enquiry submitted successfully!\n\nWe'll contact you within 24 hours. Thank you for choosing Kidzstar! 🌟", type: "menu",
         options: [
             { label: "🏠 Go to Home", action: "nav", route: "/" },
             { label: "📋 New Enquiry", next: "childName" },
@@ -72,7 +216,7 @@ const STEPS = [
             { label: "👋 Close", action: "close" },
         ]
     },
-    { id: "bye", bot: "Bye bye! 🐾 Come visit us anytime!", type: "end" },
+    { id: "bye", bot: "Bye bye! 🐾 Come visit us anytime! Keep shining! ✨", type: "end" },
 ];
 
 const stepMap = Object.fromEntries(STEPS.map(s => [s.id, s]));

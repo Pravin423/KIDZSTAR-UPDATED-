@@ -6,6 +6,7 @@ import ZoomScroll from "@/components/ZoomScroll";
 import Vision from "@/components/AboutUs/Vision";
 import Team from "@/components/AboutUs/Team";
 import Curriculum from "@/components/AboutUs/Curriculum";
+import PhotoGallery from "@/components/AboutUs/PhotoGallery";
 import CreativeSurroundings from "@/components/AboutUs/CreativeSurroundings";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import CatChatbot from "@/components/CatChatbot";
@@ -134,14 +135,19 @@ export default function About() {
           <Curriculum />
         </div>
 
+        {/* Step 7: Photo Gallery */}
+        <div className="relative z-20 bg-white">
+          <PhotoGallery />
+        </div>
+
         {/* Footer */}
         <div className="relative z-20">
           <Footer />
         </div>
 
-       
 
-       
+
+
       </div>
 
       <style jsx global>{`

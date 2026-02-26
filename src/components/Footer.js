@@ -111,18 +111,16 @@ const FooterContent = () => (
           <div className={`${poppins.className} text-[#E2E8F0] text-[15px] space-y-6 w-full max-w-[280px]`}>
             <div className="flex items-start justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
               <span className="text-[#FF6D92]"><LocationIcon /></span>
-              <span className="leading-relaxed">123 KidzStar Avenue,<br />Learning Block, Education City 12345</span>
+              <span className="leading-relaxed">Thane - Sawarkar Nagar
+& Indira Nagar, Koparkhairane</span>
             </div>
 
             <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
               <span className="text-[#FF6D92]"><PhoneIcon /></span>
-              <span>+1 (555) 123-4567</span>
+              <span>9321002881 / 9323331360 / 7304344802</span>
             </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors hover:cursor-pointer pb-4">
-              <span className="text-[#FF6D92]"><EmailIcon /></span>
-              <span className="hover:text-white transition-colors">hello@kidzstar.com</span>
-            </div>
+           
           </div>
         </div>
 

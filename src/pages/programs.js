@@ -79,13 +79,13 @@ export default function Programs() {
           100% { transform: translate(0px, 0px) scale(1); }
         }
         .animate-blob {
-          animation: blob 7s infinite;
+          animation: blob 4s infinite;
         }
         .animation-delay-2000 {
-          animation-delay: 2s;
+          animation-delay: -1.3s;
         }
         .animation-delay-4000 {
-          animation-delay: 4s;
+          animation-delay: -2.6s;
         }
       `}</style>
     </>

@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { UserCheck } from 'lucide-react';
+import * as THREE from 'three';
 
 const programs = [
     {
         place: 'Playgroup',
-        title: 'PLAY',
-        title2: 'GROUP',
+        title: 'PLAY GROUP',
         description: 'Play Group aims to provide a safe and stimulating environment where toddlers can explore, make choices and interact with others.',
         image: '/child1.png',
         age: "2.5–3.5 yrs",
@@ -15,8 +13,7 @@ const programs = [
     },
     {
         place: 'Nursery',
-        title: 'NURSERY',
-        title2: 'CLASS',
+        title: 'NURSERY CLASS',
         description: 'In Nursery, we encourage children to use materials in flexible and imaginative ways, sustaining their interests and extending knowledge.',
         image: '/child2.png',
         age: "3.5–4.5 yrs",
@@ -25,8 +22,7 @@ const programs = [
     },
     {
         place: 'Junior KG',
-        title: 'JUNIOR',
-        title2: 'KINDERGARTEN',
+        title: 'JUNIOR KINDERGARTEN',
         description: 'Junior KG introduces basic academic concepts through collaborative play, developing an understanding of themselves and the world.',
         image: '/child3.png',
         age: "4.5–5.5 yrs",
@@ -35,8 +31,7 @@ const programs = [
     },
     {
         place: 'Senior KG',
-        title: 'SENIOR',
-        title2: 'KINDERGARTEN',
+        title: 'SENIOR KINDERGARTEN',
         description: 'Senior KG prepares kids for primary school by encouraging them to initiate inquiry, ask questions, and build foundational skills.',
         image: '/child4.png',
         age: "5.5–6.5 yrs",
@@ -46,694 +41,390 @@ const programs = [
 ];
 
 export default function ProgramOverview() {
-    const comp = useRef(null);
+    const rootRef = useRef(null);
+    const canvasContainerRef = useRef(null);
 
     useEffect(() => {
-        let ctx = gsap.context(() => {
-            let order = Array.from({ length: programs.length }, (_, i) => i);
-            let detailsEven = true;
+        if (!canvasContainerRef.current) return;
 
-            let offsetTop = 200;
-            let offsetLeft = 700;
-            let cardWidth = 200;
-            let cardHeight = 300;
-            let gap = 40;
-            let numberSize = 50;
-            const ease = "sine.inOut";
-            let clicks = 0;
-            let isAnimating = false;
+        const CONFIG = {
+            slideCount: programs.length,
+            spacingX: 45,
+            
+            pWidth: 14,
+            pHeight: 18,
+            
+            camZ: 30,
+            wallAngleY: -0.25,
 
-            function getCard(index) { return `#card${index}`; }
-            function getCardContent(index) { return `#card-content-${index}`; }
-            function getSliderItem(index) { return `#slide-item-${index}`; }
+            snapDelay: 300,
+            lerpSpeed: 0.06
+        };
 
-            function animate(target, duration, properties) {
-                return new Promise((resolve) => {
-                    gsap.to(target, {
-                        ...properties,
-                        duration: duration,
-                        onComplete: resolve,
-                    });
-                });
-            }
+        const totalGalleryWidth = CONFIG.slideCount * CONFIG.spacingX;
 
-            function updateContent(containerSelector, itemIndex) {
-                const container = comp.current?.querySelector(containerSelector);
-                if (container) {
-                    const tPlace = container.querySelector('.text');
-                    const t1 = container.querySelector('.title-1');
-                    const t2 = container.querySelector('.title-2');
-                    const desc = container.querySelector('.desc');
-                    const ageText = container.querySelector('.age-text');
-                    const daysText = container.querySelector('.days-text');
-                    const hoursText = container.querySelector('.hours-text');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf7f7f5);
+        scene.fog = new THREE.Fog(0xf7f7f5, 10, 110); 
 
-                    if (tPlace) tPlace.textContent = programs[itemIndex].place;
-                    if (t1) t1.textContent = programs[itemIndex].title;
-                    if (t2) t2.textContent = programs[itemIndex].title2;
-                    if (desc) desc.textContent = programs[itemIndex].description;
-                    if (ageText) ageText.textContent = programs[itemIndex].age;
-                    if (daysText) daysText.textContent = programs[itemIndex].daysWeekly;
-                    if (hoursText) hoursText.textContent = programs[itemIndex].hoursPeriod;
+        const containerNode = rootRef.current;
+        const width = containerNode.offsetWidth || window.innerWidth;
+        const height = containerNode.offsetHeight || window.innerHeight;
+
+        const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+        camera.position.set(0, 0, CONFIG.camZ);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        // Clean up any existing canvas
+        while(canvasContainerRef.current.firstChild) {
+            canvasContainerRef.current.removeChild(canvasContainerRef.current.firstChild);
+        }
+        canvasContainerRef.current.appendChild(renderer.domElement);
+
+        const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambient);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+
+        const galleryGroup = new THREE.Group();
+        scene.add(galleryGroup);
+
+        const textureLoader = new THREE.TextureLoader();
+        const planeGeo = new THREE.PlaneGeometry(CONFIG.pWidth, CONFIG.pHeight);
+
+        const paintingGroups = [];
+
+        for(let i=0; i<CONFIG.slideCount; i++) {
+            const group = new THREE.Group();
+            group.position.set(i * CONFIG.spacingX, 0, 0);
+            
+            // Note: Transparent child.png images can cause overlap sorting issues in WebGL
+            // Adding transparent:true and adjusting depth writes if necessary.
+            const mat = new THREE.MeshBasicMaterial({ 
+                map: textureLoader.load(programs[i].image),
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+            const mesh = new THREE.Mesh(planeGeo, mat);
+            const edges = new THREE.EdgesGeometry(planeGeo);
+            const outline = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x222222 }));
+
+            const shadowGeo = new THREE.PlaneGeometry(CONFIG.pWidth, CONFIG.pHeight);
+            const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.15 });
+            const shadow = new THREE.Mesh(shadowGeo, shadowMat);
+            shadow.position.set(0.8, -0.8, -0.5); 
+
+            const lineZ = -1;
+            const lineLen = CONFIG.spacingX;
+            const lineGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(-lineLen/2, 14, lineZ), new THREE.Vector3(lineLen/2, 14, lineZ),
+                new THREE.Vector3(-lineLen/2, -14, lineZ), new THREE.Vector3(lineLen/2, -14, lineZ)
+            ]);
+            const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({ color: 0xdddddd }));
+
+            group.add(shadow);
+            group.add(mesh);
+            group.add(outline);
+            group.add(lines);
+            
+            galleryGroup.add(group);
+            paintingGroups.push(group);
+        }
+
+        galleryGroup.rotation.y = CONFIG.wallAngleY;
+        galleryGroup.position.x = 8; 
+
+        let currentScroll = 0;
+        let targetScroll = 0;
+        let snapTimer = null;
+        let mouse = { x: 0, y: 0 };
+
+        let autoSwipeInterval = null;
+
+        function snapToNearest() {
+            const index = Math.round(targetScroll / CONFIG.spacingX);
+            targetScroll = index * CONFIG.spacingX;
+        }
+
+        function runAutoSwipe() {
+            const currentIndex = Math.round(targetScroll / CONFIG.spacingX);
+            targetScroll = (currentIndex + 1) * CONFIG.spacingX;
+        }
+
+        function startAutoSwipe() {
+            if(autoSwipeInterval) clearInterval(autoSwipeInterval);
+            autoSwipeInterval = setInterval(runAutoSwipe, 4000);
+        }
+
+        function stopAutoSwipe() {
+            if(autoSwipeInterval) clearInterval(autoSwipeInterval);
+        }
+
+        startAutoSwipe();
+
+        let touchStart = 0;
+        const handleTouchStart = (e) => {
+            touchStart = e.touches[0].clientX;
+            stopAutoSwipe();
+            if(snapTimer) clearTimeout(snapTimer);
+        };
+        
+        const handleTouchMove = (e) => {
+            const diff = touchStart - e.touches[0].clientX;
+            targetScroll += diff * 0.6;
+            touchStart = e.touches[0].clientX;
+            if(snapTimer) clearTimeout(snapTimer);
+        };
+
+        const handleTouchEnd = () => {
+            snapToNearest();
+            startAutoSwipe();
+        };
+
+        const handleMouseMove = (e) => {
+            const rect = containerNode.getBoundingClientRect();
+            const relX = e.clientX - rect.left;
+            const relY = e.clientY - rect.top;
+            mouse.x = (relX / containerNode.offsetWidth) * 2 - 1;
+            mouse.y = -(relY / containerNode.offsetHeight) * 2 + 1;
+        };
+
+        const handleResize = () => {
+            if (!containerNode) return;
+            const newWidth = containerNode.offsetWidth || window.innerWidth;
+            const newHeight = containerNode.offsetHeight || window.innerHeight;
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, newHeight);
+        };
+
+        // We bind events directly to window / specific elements
+        containerNode.addEventListener('touchstart', handleTouchStart, { passive: true });
+        containerNode.addEventListener('touchmove', handleTouchMove, { passive: true });
+        containerNode.addEventListener('touchend', handleTouchEnd);
+        containerNode.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('resize', handleResize);
+
+        let animationFrameId;
+
+        function updateUI(scrollX) {
+            const rawIndex = Math.round(scrollX / CONFIG.spacingX);            
+            const safeIndex = ((rawIndex % CONFIG.slideCount) + CONFIG.slideCount) % CONFIG.slideCount;     
+            for(let i=0; i<CONFIG.slideCount; i++) {
+                const el = rootRef.current?.querySelector(`#po-slide-${i}`);
+                if(el) {
+                    if(i === safeIndex) el.classList.add('active');
+                    else el.classList.remove('active');
                 }
             }
+        }
 
-            function init() {
-                const [active, ...rest] = order;
-                const detailsActive = detailsEven ? "#details-even" : "#details-odd";
-                const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
+        function animate() {
+            animationFrameId = requestAnimationFrame(animate);
+            currentScroll += (targetScroll - currentScroll) * CONFIG.lerpSpeed;
+            const xMove = currentScroll * Math.cos(CONFIG.wallAngleY);
+            const zMove = currentScroll * Math.sin(CONFIG.wallAngleY);
+            camera.position.x = xMove;
+            camera.position.z = CONFIG.camZ - zMove;
+            paintingGroups.forEach((group, i) => {
+                const originalX = i * CONFIG.spacingX;
+                const distFromCam = currentScroll - originalX;
+                const shift = Math.round(distFromCam / totalGalleryWidth) * totalGalleryWidth;
+                group.position.x = originalX + shift;
+            });
+            camera.rotation.x = mouse.y * 0.05; 
+            camera.rotation.y = -mouse.x * 0.05;
+            updateUI(currentScroll);
+            renderer.render(scene, camera);
+        }
 
-                const width = window.innerWidth;
-                const height = window.innerHeight;
+        animate();
 
-                offsetTop = height - 430;
-                offsetLeft = width - 830;
-
-                // Add safeguard for smaller screens
-                if (width < 1024) {
-                    offsetLeft = width - (cardWidth + gap) * 1.5;
-                }
-
-                gsap.set("#pagination", {
-                    top: offsetTop + 330,
-                    left: offsetLeft,
-                    y: 200,
-                    opacity: 0,
-                    zIndex: 60,
-                });
-
-                gsap.set(getCard(active), {
-                    x: 0,
-                    y: 0,
-                    width: width,
-                    height: height,
-                });
-                gsap.set(getCardContent(active), { x: 0, y: 0, opacity: 0 });
-                gsap.set(detailsActive, { opacity: 0, zIndex: 22, x: -200 });
-                gsap.set(detailsInactive, { opacity: 0, zIndex: 12 });
-                gsap.set(`${detailsInactive} .text`, { y: 100 });
-                gsap.set(`${detailsInactive} .title-1`, { y: 100 });
-                gsap.set(`${detailsInactive} .title-2`, { y: 100 });
-                gsap.set(`${detailsInactive} .desc`, { y: 50 });
-                gsap.set(`${detailsInactive} .cta`, { y: 60 });
-                gsap.set(`${detailsInactive} .age-container`, { y: 50 });
-
-                gsap.set(".progress-sub-foreground", {
-                    width: 500 * (1 / order.length) * (active + 1),
-                });
-
-                rest.forEach((i, index) => {
-                    gsap.set(getCard(i), {
-                        x: offsetLeft + 400 + index * (cardWidth + gap),
-                        y: offsetTop,
-                        width: cardWidth,
-                        height: cardHeight,
-                        zIndex: 30,
-                        borderRadius: 10,
-                    });
-                    gsap.set(getCardContent(i), {
-                        x: offsetLeft + 400 + index * (cardWidth + gap),
-                        zIndex: 40,
-                        y: offsetTop + cardHeight - 100,
-                    });
-                    gsap.set(getSliderItem(i), { x: (index + 1) * numberSize });
-                });
-
-                gsap.set(".indicator", { x: -window.innerWidth });
-
-                const startDelay = 0.6;
-
-                gsap.to(".cover", {
-                    x: width + 400,
-                    delay: 0.5,
-                    ease,
-                    onComplete: () => {
-                        // Initial content set
-                        updateContent(detailsActive, order[0]);
-                        setTimeout(() => {
-                            loop();
-                        }, 500);
-                    },
-                });
-
-                rest.forEach((i, index) => {
-                    gsap.to(getCard(i), {
-                        x: offsetLeft + index * (cardWidth + gap),
-                        zIndex: 30,
-                        delay: startDelay + 0.05 * index,
-                        ease,
-                    });
-                    gsap.to(getCardContent(i), {
-                        x: offsetLeft + index * (cardWidth + gap),
-                        zIndex: 40,
-                        delay: startDelay + 0.05 * index,
-                        ease,
-                    });
-                });
-
-                gsap.to("#pagination", { y: 0, opacity: 1, ease, delay: startDelay });
-                gsap.to(detailsActive, { opacity: 1, x: 0, ease, delay: startDelay });
+        return () => {
+            cancelAnimationFrame(animationFrameId);
+            stopAutoSwipe();
+            containerNode.removeEventListener('touchstart', handleTouchStart);
+            containerNode.removeEventListener('touchmove', handleTouchMove);
+            containerNode.removeEventListener('touchend', handleTouchEnd);
+            containerNode.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('resize', handleResize);
+            if (canvasContainerRef.current && renderer.domElement) {
+                canvasContainerRef.current.removeChild(renderer.domElement);
             }
-
-            function step() {
-                return new Promise((resolve) => {
-                    order.push(order.shift());
-                    detailsEven = !detailsEven;
-
-                    const detailsActive = detailsEven ? "#details-even" : "#details-odd";
-                    const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
-
-                    updateContent(detailsActive, order[0]);
-
-                    gsap.set(detailsActive, { zIndex: 22 });
-                    gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
-                    gsap.to(`${detailsActive} .text`, {
-                        y: 0,
-                        delay: 0.1,
-                        duration: 0.7,
-                        ease,
-                    });
-                    gsap.to(`${detailsActive} .title-1`, {
-                        y: 0,
-                        delay: 0.15,
-                        duration: 0.7,
-                        ease,
-                    });
-                    gsap.to(`${detailsActive} .title-2`, {
-                        y: 0,
-                        delay: 0.15,
-                        duration: 0.7,
-                        ease,
-                    });
-                    gsap.to(`${detailsActive} .desc`, {
-                        y: 0,
-                        delay: 0.3,
-                        duration: 0.4,
-                        ease,
-                    });
-                    gsap.to(`${detailsActive} .age-container`, {
-                        y: 0,
-                        delay: 0.32,
-                        duration: 0.4,
-                        ease,
-                    });
-                    gsap.to(`${detailsActive} .cta`, {
-                        y: 0,
-                        delay: 0.35,
-                        duration: 0.4,
-                        onComplete: resolve,
-                        ease,
-                    });
-                    gsap.set(detailsInactive, { zIndex: 12 });
-
-                    const [active, ...rest] = order;
-                    const prv = rest[rest.length - 1];
-
-                    gsap.set(getCard(prv), { zIndex: 10 });
-                    gsap.set(getCard(active), { zIndex: 20 });
-                    gsap.to(getCard(prv), { scale: 1.5, ease });
-
-                    gsap.to(getCardContent(active), {
-                        y: offsetTop + cardHeight - 10,
-                        opacity: 0,
-                        duration: 0.3,
-                        ease,
-                    });
-                    gsap.to(getSliderItem(active), { x: 0, ease });
-                    gsap.to(getSliderItem(prv), { x: -numberSize, ease });
-                    gsap.to(".progress-sub-foreground", {
-                        width: 500 * (1 / order.length) * (active + 1),
-                        ease,
-                    });
-
-                    gsap.to(getCard(active), {
-                        x: 0,
-                        y: 0,
-                        ease,
-                        width: window.innerWidth,
-                        height: window.innerHeight,
-                        borderRadius: 0,
-                        onComplete: () => {
-                            const xNew = offsetLeft + (rest.length - 1) * (cardWidth + gap);
-                            gsap.set(getCard(prv), {
-                                x: xNew,
-                                y: offsetTop,
-                                width: cardWidth,
-                                height: cardHeight,
-                                zIndex: 30,
-                                borderRadius: 10,
-                                scale: 1,
-                            });
-
-                            gsap.set(getCardContent(prv), {
-                                x: xNew,
-                                y: offsetTop + cardHeight - 100,
-                                opacity: 1,
-                                zIndex: 40,
-                            });
-                            gsap.set(getSliderItem(prv), { x: rest.length * numberSize });
-
-                            gsap.set(detailsInactive, { opacity: 0 });
-                            gsap.set(`${detailsInactive} .text`, { y: 100 });
-                            gsap.set(`${detailsInactive} .title-1`, { y: 100 });
-                            gsap.set(`${detailsInactive} .title-2`, { y: 100 });
-                            gsap.set(`${detailsInactive} .desc`, { y: 50 });
-                            gsap.set(`${detailsInactive} .cta`, { y: 60 });
-                            gsap.set(`${detailsInactive} .age-container`, { y: 50 });
-                            clicks -= 1;
-                            if (clicks > 0) {
-                                step();
-                            }
-                        },
-                    });
-
-                    rest.forEach((i, index) => {
-                        if (i !== prv) {
-                            const xNew = offsetLeft + index * (cardWidth + gap);
-                            gsap.set(getCard(i), { zIndex: 30 });
-                            gsap.to(getCard(i), {
-                                x: xNew,
-                                y: offsetTop,
-                                width: cardWidth,
-                                height: cardHeight,
-                                ease,
-                                delay: 0.1 * (index + 1),
-                            });
-
-                            gsap.to(getCardContent(i), {
-                                x: xNew,
-                                y: offsetTop + cardHeight - 100,
-                                opacity: 1,
-                                zIndex: 40,
-                                ease,
-                                delay: 0.1 * (index + 1),
-                            });
-                            gsap.to(getSliderItem(i), { x: (index + 1) * numberSize, ease });
-                        }
-                    });
-                });
-            }
-
-            let loopContext = true;
-            async function loop() {
-                if (!loopContext) return;
-                await animate(".indicator", 2, { x: 0 });
-                if (!loopContext) return;
-                await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
-                if (!loopContext) return;
-                gsap.set(".indicator", { x: -window.innerWidth });
-                await step();
-                if (!loopContext) return;
-                loop();
-            }
-
-            init();
-
-            // Interactions
-            const rightArrow = comp.current?.querySelector('.arrow-right');
-            const leftArrow = comp.current?.querySelector('.arrow-left');
-
-            const handleRight = async () => {
-                if (isAnimating) return;
-                isAnimating = true;
-                loopContext = false;
-                gsap.killTweensOf(".indicator");
-                gsap.set(".indicator", { x: -window.innerWidth });
-                await step();
-                isAnimating = false;
-            };
-
-            if (rightArrow) rightArrow.addEventListener('click', handleRight);
-
-            return () => {
-                loopContext = false;
-                if (rightArrow) rightArrow.removeEventListener('click', handleRight);
-            };
-
-        }, comp);
-
-        return () => ctx.revert(); // cleanup
+            renderer.dispose();
+        };
     }, []);
 
     return (
-        <>
-            <div className="po-container font-montserrat" ref={comp}>
-                <div className="indicator"></div>
+        <div className="po-container" ref={rootRef}>
+            <div className="logo">KIDZSTAR PROGRAMS</div>
 
-                <div id="demo">
-                    {programs.map((p, index) => (
-                        <div key={`card-${index}`} className="card" id={`card${index}`} style={{ backgroundImage: `url(${p.image})` }} />
-                    ))}
-                    {programs.map((p, index) => (
-                        <div key={`cc-${index}`} className="card-content" id={`card-content-${index}`}>
-                            <div className="content-start"></div>
-                            <div className="content-place">{p.place}</div>
-                            <div className="content-title-1">{p.title}</div>
-                            <div className="content-title-2">{p.title2}</div>
-                        </div>
-                    ))}
-                </div>
+            <div className="canvas-container" ref={canvasContainerRef}></div>
 
-                {/* DETAILS - EVEN */}
-                <div className="details" id="details-even">
-                    <div className="place-box">
-                        <div className="text text-white"></div>
-                    </div>
-                    <div className="title-box-1"><div className="title-1 text-white"></div></div>
-                    <div className="title-box-2"><div className="title-2 text-white"></div></div>
-                    <div className="desc text-white"></div>
-
-                    <div className="flex flex-col gap-3 mt-6 text-white age-container relative">
-                        <div className="flex items-center gap-4">
-                            <span className="w-8 h-8 rounded-full bg-[#FF4081] flex items-center justify-center shadow-lg shadow-[#FF4081]/30">👶</span>
-                            <span className="font-bold text-xl age-text tracking-wide"></span>
+            <div className="ui-layer">
+                {programs.map((prog, index) => (
+                    <div 
+                        className={`slide-content ${index === 0 ? 'active' : ''}`} 
+                        id={`po-slide-${index}`}
+                        key={index}
+                    >
+                        <span className="catalogue-number">0{index + 1} / Collection</span>
+                        <h1>{prog.place}</h1>
+                        <div className="description">
+                            {prog.description}
                         </div>
-                        <div className="flex items-center gap-4">
-                            <span className="w-8 h-8 rounded-full bg-[#00BCD4] flex items-center justify-center shadow-lg shadow-[#00BCD4]/30">📅</span>
-                            <span className="font-medium text-lg days-text text-gray-200 tracking-wide"></span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <span className="w-8 h-8 rounded-full bg-[#8BC34A] flex items-center justify-center shadow-lg shadow-[#8BC34A]/30">⏰</span>
-                            <span className="font-medium text-lg hours-text text-gray-200 tracking-wide"></span>
+                        <div className="meta-grid">
+                            <span className="meta-label">Title</span> <span className="meta-value">{prog.title}</span>
+                            <span className="meta-label">Age</span> <span className="meta-value">{prog.age}</span>
+                            <span className="meta-label">Time</span> <span className="meta-value">{prog.hoursPeriod}</span>
+                            <span className="meta-label">Days</span> <span className="meta-value">{prog.daysWeekly}</span>
                         </div>
                     </div>
-
-                    <div className="cta flex gap-4 mt-8 pt-4">
-                        <button className="bookmark group flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
-                                <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clipRule="evenodd" />
-                            </svg>
-                        </button>
-                        <button className="discover group relative overflow-hidden">
-                            <span className="relative z-10 font-bold uppercase tracking-wider text-sm">Discover Program</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* DETAILS - ODD */}
-                <div className="details" id="details-odd">
-                    <div className="place-box">
-                        <div className="text text-white"></div>
-                    </div>
-                    <div className="title-box-1"><div className="title-1 text-white"></div></div>
-                    <div className="title-box-2"><div className="title-2 text-white"></div></div>
-                    <div className="desc text-white"></div>
-
-                    <div className="flex flex-col gap-3 mt-6 text-white age-container relative">
-                        <div className="flex items-center gap-4">
-                            <span className="w-8 h-8 rounded-full bg-[#FF4081] flex items-center justify-center shadow-lg shadow-[#FF4081]/30">👶</span>
-                            <span className="font-bold text-xl age-text tracking-wide"></span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <span className="w-8 h-8 rounded-full bg-[#00BCD4] flex items-center justify-center shadow-lg shadow-[#00BCD4]/30">📅</span>
-                            <span className="font-medium text-lg days-text text-gray-200 tracking-wide"></span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <span className="w-8 h-8 rounded-full bg-[#8BC34A] flex items-center justify-center shadow-lg shadow-[#8BC34A]/30">⏰</span>
-                            <span className="font-medium text-lg hours-text text-gray-200 tracking-wide"></span>
-                        </div>
-                    </div>
-
-                    <div className="cta flex gap-4 mt-8 pt-4">
-                        <button className="bookmark group flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
-                                <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clipRule="evenodd" />
-                            </svg>
-                        </button>
-                        <button className="discover group relative overflow-hidden">
-                            <span className="relative z-10 font-bold uppercase tracking-wider text-sm">Discover Program</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div className="pagination" id="pagination">
-                    <div className="arrow arrow-left cursor-pointer hover:bg-white/10 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                        </svg>
-                    </div>
-                    <div className="arrow arrow-right cursor-pointer hover:bg-white/10 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </div>
-                    <div className="progress-sub-container">
-                        <div className="progress-sub-background border border-white/20 rounded-full overflow-hidden">
-                            <div className="progress-sub-foreground bg-[#FF4081]"></div>
-                        </div>
-                    </div>
-                    <div className="slide-numbers" id="slide-numbers">
-                        {programs.map((_, i) => <div key={`sn-${i}`} className="item" id={`slide-item-${i}`}>{i + 1}</div>)}
-                    </div>
-                </div>
-
-                <div className="cover"></div>
+                ))}
             </div>
 
-            <style jsx>{`
-        .po-container {
-          margin: 0;
-          background-color: #0d3697;
-          color: rgba(255, 255, 255, 0.87);
-          position: relative;
-          overflow: hidden;
-          width: 100%;
-          height: 100vh;
-          font-family: inherit;
-        }
+            <style jsx global>{`
+                .po-container {
+                    position: relative;
+                    width: 100%;
+                    height: calc(100vh - 97px);
+                    min-height: 700px;
+                    overflow: hidden;
+                    scroll-margin-top: 97px;
+                    background-color: #f7f7f5;
+                    font-family: 'Montserrat', Arial, sans-serif;
+                    color: #111;
+                }
 
-        .card {
-          position: absolute;
-          left: 0;
-          top: 0;
-          background-position: center;
-          background-size: cover;
-          box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.4);
-        }
+                .po-container .canvas-container {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 1;
+                }
 
-        .card::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.2) 60%, transparent);
-        }
+                .po-container .ui-layer {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 2;
+                    pointer-events: none;
+                }
 
-        .card-content {
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: rgba(255, 255, 255, 0.87);
-          padding-left: 16px;
-        }
+                .po-container .logo {
+                    position: absolute;
+                    top: 40px;
+                    left: 50px;
+                    font-family: 'Montserrat', Arial, sans-serif;
+                    font-weight: 800;
+                    letter-spacing: 2px;
+                    font-size: 1rem;
+                    text-transform: uppercase;
+                    z-index: 10;
+                }
 
-        .content-place {
-          margin-top: 6px;
-          font-size: 14px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
+                .po-container .slide-content {
+                    position: absolute;
+                    top: 25%;
+                    left: 16%;
+                    width: 30%;
+                    min-width: 300px;
+                    max-width: 450px;
+                    opacity: 0;
+                    pointer-events: none;
+                    z-index: 10;
+                }
 
-        .content-title-1,
-        .content-title-2 {
-          font-weight: 800;
-          font-size: 24px;
-        }
+                .po-container .slide-content.active {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
 
-        .content-start {
-          width: 30px;
-          height: 5px;
-          border-radius: 99px;
-          background-color: #FF4081;
-        }
+                .po-container .slide-content > * {
+                    opacity: 0;
+                    transform: translateY(15px);
+                    transition: all 0.6s ease-out;
+                }
 
-        .details {
-          z-index: 22;
-          position: absolute;
-          top: 20%;
-          left: 80px;
-        }
+                .po-container .slide-content.active > * {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
 
-        .place-box {
-          height: 46px;
-          overflow: hidden;
-        }
-        
-        .place-box .text {
-          padding-top: 16px;
-          font-size: 22px;
-          position: relative;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-        }
+                .po-container .slide-content.active .catalogue-number { transition-delay: 0.1s; }
+                .po-container .slide-content.active h1 { transition-delay: 0.2s; }
+                .po-container .slide-content.active .description { transition-delay: 0.3s; }
+                .po-container .slide-content.active .meta-grid { transition-delay: 0.4s; }
 
-        .place-box .text:before {
-          top: 0;
-          left: 0;
-          position: absolute;
-          content: "";
-          width: 40px;
-          height: 5px;
-          border-radius: 99px;
-          background-color: #FF4081;
-        }
+                .po-container h1 {
+                    font-family: 'Montserrat', Arial, sans-serif;
+                    font-weight: 900;
+                    font-size: 4.5rem;
+                    margin: 0 0 1rem 0;
+                    line-height: 1.1;
+                    color: #0D3697;
+                }
 
-        .title-1,
-        .title-2 {
-          font-weight: 900;
-          font-size: clamp(40px, 6vw, 84px);
-          line-height: 1.1;
-          color: white;
-          text-transform: uppercase;
-        }
+                @media (max-width: 768px) {
+                    .po-container h1 { font-size: 3.5rem; }
+                    .po-container .slide-content { top: 15%; width: 80%; left: 10%; }
+                }
 
-        .title-box-1,
-        .title-box-2 {
-          height: auto;
-          min-height: clamp(50px, 7vw, 100px);
-          overflow: hidden;
-        }
+                .po-container .catalogue-number {
+                    font-size: 0.75rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    color: #fff;
+                    background-color: #E6AF2E;
+                    padding: 6px 14px;
+                    border-radius: 99px;
+                    margin-bottom: 1.5rem;
+                    display: inline-block;
+                }
 
-        .desc {
-          margin-top: 24px;
-          width: 550px;
-          font-size: 18px;
-          line-height: 1.7;
-          opacity: 0.9;
-        }
-        
-        @media (max-width: 768px) {
-           .desc { width: 90vw; }
-           .details { left: 40px; top: 15%; }
-           .card-content { display: none; }
-        }
+                .po-container .description {
+                    font-size: 1.1rem;
+                    font-weight: 500;
+                    line-height: 1.8;
+                    color: #444;
+                    margin-bottom: 2.5rem;
+                    text-align: left;
+                }
 
-        .cta .bookmark {
-          border: none;
-          background-color: #FF4081;
-          width: 50px;
-          height: 50px;
-          border-radius: 99px;
-          color: white;
-          display: grid;
-          place-items: center;
-        }
-        
-        .cta .bookmark svg {
-          width: 24px;
-          height: 24px;
-        }
+                .po-container .meta-grid {
+                    display: grid;
+                    grid-template-columns: 80px 1fr;
+                    row-gap: 1.2rem;
+                    border-top: 2px solid rgba(230, 175, 46, 0.4);
+                    padding-top: 1.5rem;
+                }
 
-        .cta .discover {
-          border: 2px solid rgba(255,255,255,0.8);
-          background-color: transparent;
-          height: 50px;
-          border-radius: 99px;
-          color: #ffffff;
-          padding: 0 32px;
-          transition: all 0.3s ease;
-        }
-        
-        .cta .discover:hover {
-           background-color: white;
-           color: #FF4081;
-        }
+                .po-container .meta-label {
+                    font-size: 0.7rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1.5px;
+                    color: #FF4081;
+                    align-self: center;
+                }
 
-        .indicator {
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 0;
-          height: 6px;
-          z-index: 60;
-          background-color: #FF4081;
-        }
-
-        .pagination {
-          position: absolute;
-          left: 0px;
-          top: 0px;
-          display: inline-flex;
-          align-items: center;
-        }
-
-        .arrow {
-          z-index: 60;
-          width: 50px;
-          height: 50px;
-          border-radius: 999px;
-          border: 2px solid rgba(255,255,255,0.4);
-          display: grid;
-          place-items: center;
-        }
-        
-        .arrow:nth-child(2) {
-          margin-left: 16px;
-        }
-
-        .arrow svg {
-          width: 20px;
-          height: 20px;
-          stroke-width: 2;
-          color: white;
-        }
-
-        .progress-sub-container {
-          margin-left: 24px;
-          z-index: 60;
-          width: 400px;
-          height: 50px;
-          display: flex;
-          align-items: center;
-        }
-
-        @media (max-width: 1024px) {
-          .progress-sub-container { width: 200px; }
-        }
-
-        .progress-sub-background {
-          width: 100%;
-          height: 4px;
-          background-color: rgba(255,255,255,0.2);
-        }
-
-        .progress-sub-foreground {
-          height: 4px;
-          background-color: #FF4081;
-        }
-
-        .slide-numbers {
-          width: 50px;
-          height: 50px;
-          overflow: hidden;
-          z-index: 60;
-          position: relative;
-          margin-left: 16px;
-        }
-
-        .item {
-          width: 50px;
-          height: 50px;
-          position: absolute;
-          color: white;
-          top: 0;
-          left: 0;
-          display: grid;
-          place-items: center;
-          font-size: 32px;
-          font-weight: 800;
-        }
-
-        .cover {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100vw;
-          height: 100vh;
-          background-color: #0d3697;
-          z-index: 100;
-        }
-      `}</style>
-        </>
+                .po-container .meta-value {
+                    font-family: 'Montserrat', Arial, sans-serif;
+                    font-size: 1.1rem;
+                    font-weight: 800;
+                    color: #0D3697;
+                }
+            `}</style>
+        </div>
     );
 }

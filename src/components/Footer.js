@@ -190,7 +190,7 @@ const Footer = () => {
       </div>
 
       {/* ── DESKTOP LAYOUT ── */}
-      <div className="hidden md:flex flex-col justify-end bg-[#000E30] bg-[url('/dd.png')] bg-repeat-space bg-cover overflow-hidden bg-center relative pt-[400px] lg:pt-[550px] xl:pt-[750px]">
+      <div className="hidden md:flex flex-col justify-end bg-[#000E30] bg-[url('/dd.png')] bg-repeat-space bg-cover overflow-hidden bg-center relative pt-[150px] lg:pt-[200px] xl:pt-[250px]">
 
         {/* Top Middle Content: The requested content right in the stars */}
         <div className="w-full z-20 relative">

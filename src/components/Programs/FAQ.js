@@ -29,12 +29,12 @@ export default function FAQ() {
         <div className="bg-[#FFFAF5] py-32 relative overflow-hidden font-montserrat">
             {/* Curved Loop Stats Animation */}
             <div className="w-full mb-32 relative hidden md:block -mt-16">
-                 <CurvedLoop 
+                <CurvedLoop
                     marqueeText="15+ Years of experience  ✦  8k+ Students each year  ✦  50+ Qualified Teachers  ✦  18+ Award Winning  ✦  "
                     speed={1.5}
                     className="text-[2rem] font-extrabold font-montserrat fill-[#0D3697]"
                     curveAmount={120}
-                 />
+                />
             </div>
 
             <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
@@ -54,8 +54,8 @@ export default function FAQ() {
                             <div
                                 key={i}
                                 className={`rounded-2xl border transition-all duration-300 ${openIndex === i
-                                        ? "border-[#FF4081] bg-[#FF4081] shadow-lg shadow-[#FF4081]/20"
-                                        : "border-gray-200 bg-white hover:border-[#FF4081]/50"
+                                    ? "border-[#FF4081] bg-[#FF4081] shadow-lg shadow-[#FF4081]/20"
+                                    : "border-gray-200 bg-white hover:border-[#FF4081]/50"
                                     }`}
                             >
                                 <button
@@ -65,21 +65,22 @@ export default function FAQ() {
                                     <span className={`font-bold text-lg ${openIndex === i ? "text-white" : "text-[#0D3697]"}`}>
                                         {faq.q}
                                     </span>
-                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${openIndex === i ? "bg-white text-[#FF4081]" : "bg-[#FF4081] text-white"
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${openIndex === i ? "bg-white text-[#FF4081]" : "bg-[#FF4081] text-white"
                                         }`}>
-                                        {openIndex === i ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                        <ChevronDown className={`w-5 h-5 transition-transform duration-[400ms] ${openIndex === i ? "rotate-180" : ""}`} />
                                     </div>
                                 </button>
-                                <AnimatePresence>
+                                <AnimatePresence initial={false}>
                                     {openIndex === i && (
                                         <motion.div
+                                            key="content"
                                             initial={{ height: 0, opacity: 0 }}
                                             animate={{ height: "auto", opacity: 1 }}
                                             exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                                            transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                                             className="overflow-hidden"
                                         >
-                                            <div className="px-6 pb-6 text-gray-100 bg-white bg-opacity-10 mt-2 text-sm md:text-base leading-relaxed">
+                                            <div className="px-6 pb-6 text-white/95 mt-1 text-sm md:text-base font-medium leading-relaxed">
                                                 {faq.a}
                                             </div>
                                         </motion.div>

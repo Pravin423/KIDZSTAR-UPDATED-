@@ -58,7 +58,7 @@ const FooterContent = () => (
             <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#FF6D92] hover:border-[#FF6D92] transition-all duration-300">
               <FacebookIcon />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#FF6D92] hover:border-[#FF6D92] transition-all duration-300">
+            <a href="https://www.instagram.com/kidzstar_7?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#FF6D92] hover:border-[#FF6D92] transition-all duration-300">
               <InstagramIcon />
             </a>
           </div>
@@ -108,19 +108,23 @@ const FooterContent = () => (
           <h3 className={`${poppins.className} text-[#FF6D92] text-lg font-semibold tracking-wider uppercase mb-6`}>
             Get In Touch
           </h3>
-          <div className={`${poppins.className} text-[#E2E8F0] text-[15px] space-y-6 w-full max-w-[280px]`}>
+          <div className={`${poppins.className} text-[#E2E8F0] text-[15px] space-y-6 w-full lg:max-w-[400px]`}>
             <div className="flex items-start justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
               <span className="text-[#FF6D92]"><LocationIcon /></span>
-              <span className="leading-relaxed">Thane - Sawarkar Nagar
-& Indira Nagar, Koparkhairane</span>
+              <span className="leading-relaxed">Thane - Sawarkar Nagar<br />& Indira Nagar, Koparkhairane</span>
             </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-              <span className="text-[#FF6D92]"><PhoneIcon /></span>
-              <span>9321002881 / 9323331360 / 7304344802</span>
+            <div className="flex items-start justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+              <span className="text-[#FF6D92] mt-0.5"><PhoneIcon /></span>
+              <span className="leading-relaxed">9321002881 / 9323331360 / 7304344802</span>
             </div>
 
-           
+            <div className="flex items-start justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+              <span className="text-[#FF6D92] mt-0.5"><EmailIcon /></span>
+              <a href="mailto:kidzstarpreprimaryschool@gmail.com" className="hover:text-white transition-colors break-all sm:break-normal">
+                kidzstarpreprimaryschool@gmail.com
+              </a>
+            </div>
           </div>
         </div>
 

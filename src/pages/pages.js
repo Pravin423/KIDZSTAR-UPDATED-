@@ -1,14 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import UnderConstruction from "@/components/UnderConstruction";
 
 export default function PagesSection() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen p-10">
-        <h1 className="text-3xl font-bold">More Pages</h1>
-        <p>Additional information about events and activities.</p>
-      </div>
+      <UnderConstruction pageTitle="More Pages" />
       <Footer />
     </>
   );

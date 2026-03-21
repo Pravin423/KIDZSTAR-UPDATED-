@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "@/components/Caveman404.css";
 import { SessionProvider } from "next-auth/react";
 import CatChatbot from "@/components/CatChatbot";
 

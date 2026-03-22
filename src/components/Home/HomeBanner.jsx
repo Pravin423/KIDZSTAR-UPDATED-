@@ -16,6 +16,11 @@ const HomeBanner = () => {
     const triangleScale = useTransform(scrollY, [0, 1000], [1, 0.1]);
     const kidScale = useTransform(scrollY, [0, 500], [1, 1.1]);
 
+    // Map scroll perfectly to the 0%-100% path timeline
+    // The shorter the scroll range (e.g. 0 to 350), the FASTER the rocket flies when scrolling!
+    const rocketProgress = useTransform(scrollY, [0, 350], ["0%", "100%"]);
+    const rocketPathLength = useTransform(scrollY, [0, 350], [0, 1]);
+
     return (
         <div className="overflow-hidden">
 
@@ -75,8 +80,54 @@ const HomeBanner = () => {
             </div>
 
             {/* ── Desktop Layout: original, completely unchanged ── */}
-            <div className="hidden md:block">
-                <div className="px-6 gap-[40px] md:pl-[100px] flex flex-col md:flex-row items-center justify-between">
+            <div className="hidden md:block relative w-full h-full">
+
+                {/* ── Scroll Path & Rocket ── */}
+                <div className="hidden lg:block absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-[5]">
+                    <svg width="100%" height="900" className="absolute top-0 left-0 overflow-visible">
+                        {/* Outer Red Glow */}
+                        <motion.path
+                            style={{ pathLength: rocketPathLength }}
+                            d="M -300 250 C -50 900, 350 850, 800 550 S 1500 100, 2000 400"
+                            fill="none"
+                            stroke="#FF0000"
+                            strokeWidth="24"
+                            opacity="0.25"
+                        />
+                        {/* Mid Orange Glow */}
+                        <motion.path
+                            style={{ pathLength: rocketPathLength }}
+                            d="M -300 250 C -50 900, 350 850, 800 550 S 1500 100, 2000 400"
+                            fill="none"
+                            stroke="#FFA500"
+                            strokeWidth="12"
+                            opacity="0.6"
+                        />
+                        {/* Inner Yellow Core */}
+                        <motion.path
+                            style={{ pathLength: rocketPathLength }}
+                            d="M -300 250 C -50 900, 350 850, 800 550 S 1500 100, 2000 400"
+                            fill="none"
+                            stroke="#FFF005"
+                            strokeWidth="3.5"
+                        />
+                    </svg>
+
+                    <motion.div
+                        className="absolute top-0 left-0 z-20 flex items-center justify-center drop-shadow-3xl"
+                        style={{
+                            offsetPath: 'path("M -300 250 C -50 900, 350 850, 800 550 S 1500 100, 2000 400")',
+                            offsetDistance: rocketProgress,
+                            offsetRotate: "auto"
+                        }}
+                    >
+                        <span style={{ transform: "rotate(90deg)", display: "inline-block" }}>
+                            <img src="/rocket_edit.gif" alt="Rocket" width="200" height="200" className="object-contain drop-shadow-xl relative top-[-40px]" />
+                        </span>
+                    </motion.div>
+                </div>
+
+                <div className="px-6 gap-[40px] md:pl-[100px] flex flex-col md:flex-row items-center justify-between relative z-10">
                     <motion.div
                         initial={{ opacity: 0, x: -100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -129,10 +180,7 @@ const HomeBanner = () => {
                     </motion.div>
 
                     <div className="flex-1 flex justify-center relative w-full max-w-[2000px] h-[500px] md:h-[900px]">
-                        <motion.div
-                            style={{ scale: triangleScale }}
-                            className="absolute inset-0 flex items-center justify-center scale-125 md:scale-150"
-                        >
+                        <div className="absolute inset-0 flex items-center justify-center scale-125 md:scale-150">
                             <Image
                                 src="/bannertrianglw.png"
                                 alt="Background Shape"
@@ -140,7 +188,7 @@ const HomeBanner = () => {
                                 height={2500}
                                 className="object-contain mt-[-100px]"
                             />
-                        </motion.div>
+                        </div>
 
                         <motion.div
                             className="relative w-[70%] h-[70%] mt-10"
@@ -164,7 +212,7 @@ const HomeBanner = () => {
                         </motion.div>
                     </div>
                 </div>
-                <div className='relative mt-[-130px] md:mt-[-300px] w-fit drop-shadow-2xl'>
+                <div className='relative z-20 mt-[-130px] md:mt-[-300px] w-fit drop-shadow-2xl'>
                     <motion.div
                         animate={{ rotate: 360 }}
                         transition={{
@@ -173,7 +221,7 @@ const HomeBanner = () => {
                             repeat: Infinity
                         }}
                     >
-                        <Image src="/eathlogo.png" alt="Earth Logo" width={200} height={200} />
+                        <Image src="/eathlogo.png" alt="Earth Logo" width={350} height={350} />
                     </motion.div>
                 </div>
             </div>

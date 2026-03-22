@@ -64,64 +64,12 @@ export default function Team() {
     return (
         <section className={`w-full py-24 bg-slate-50 overflow-hidden relative ${poppins.className}`}>
 
-            {/* Animated SVG background */}
-            <svg
-                className="absolute inset-0 w-full h-full"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ zIndex: 0 }}
-                aria-hidden="true"
-            >
-                <defs>
-                    <filter id="blur1">
-                        <feGaussianBlur stdDeviation="40" />
-                    </filter>
-                    <filter id="blur2">
-                        <feGaussianBlur stdDeviation="48" />
-                    </filter>
-                </defs>
-
-                {/* Navy blob — top left, slow drift */}
-                <ellipse cx="20%" cy="30%" rx="180" ry="150" fill="#00218E" opacity="0.14" filter="url(#blur1)">
-                    <animateTransform
-                        attributeName="transform"
-                        type="translate"
-                        values="0,0; 90,-70; 50,60; -70,25; 0,0"
-                        keyTimes="0; 0.25; 0.5; 0.75; 1"
-                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
-                        calcMode="spline"
-                        dur="18s"
-                        repeatCount="indefinite"
-                    />
-                </ellipse>
-
-                {/* Gold blob — bottom right, slow drift */}
-                <ellipse cx="80%" cy="70%" rx="200" ry="160" fill="#F5C842" opacity="0.16" filter="url(#blur1)">
-                    <animateTransform
-                        attributeName="transform"
-                        type="translate"
-                        values="0,0; -80,-55; -35,75; 65,35; 0,0"
-                        keyTimes="0; 0.25; 0.5; 0.75; 1"
-                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
-                        calcMode="spline"
-                        dur="22s"
-                        repeatCount="indefinite"
-                    />
-                </ellipse>
-
-                {/* Indigo blob — center, slow drift */}
-                <ellipse cx="55%" cy="45%" rx="160" ry="130" fill="#6366F1" opacity="0.13" filter="url(#blur2)">
-                    <animateTransform
-                        attributeName="transform"
-                        type="translate"
-                        values="0,0; 60,-80; -55,45; 0,0"
-                        keyTimes="0; 0.33; 0.66; 1"
-                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
-                        calcMode="spline"
-                        dur="15s"
-                        repeatCount="indefinite"
-                    />
-                </ellipse>
-            </svg>
+            {/* Lightweight high-performance CSS background (Replaced heavy SVG filters) */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40">
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#00218E] mix-blend-multiply blur-[100px]" />
+                <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-[#F5C842] mix-blend-multiply blur-[120px]" />
+                <div className="absolute bottom-[-20%] left-[20%] w-[500px] h-[500px] rounded-full bg-[#6366F1] mix-blend-multiply blur-[100px]" />
+            </div>
 
             <div className="max-w-6xl mx-auto px-4 relative" style={{ zIndex: 1 }}>
 
@@ -148,7 +96,7 @@ export default function Team() {
                         <motion.div
                             key={`left-${prevIdx}`}
                             className="absolute inset-0 rounded-[40px] overflow-hidden cursor-pointer"
-                            style={{ transformOrigin: "bottom center" }}
+                            style={{ transformOrigin: "bottom center", willChange: "transform, opacity" }}
                             initial={SLOT_STYLES.farLeft}
                             animate={SLOT_STYLES.left}
                             exit={SLOT_STYLES.farLeft}
@@ -170,7 +118,7 @@ export default function Team() {
                         <motion.div
                             key={`center-${activeIndex}`}
                             className="absolute inset-0 rounded-[40px] overflow-hidden"
-                            style={{ transformOrigin: "bottom center" }}
+                            style={{ transformOrigin: "bottom center", willChange: "transform, opacity" }}
                             initial={SLOT_STYLES.farRight}
                             animate={SLOT_STYLES.center}
                             exit={SLOT_STYLES.farLeft}
@@ -194,7 +142,7 @@ export default function Team() {
                         <motion.div
                             key={`right-${nextIdx}`}
                             className="absolute inset-0 rounded-[40px] overflow-hidden cursor-pointer"
-                            style={{ transformOrigin: "bottom center" }}
+                            style={{ transformOrigin: "bottom center", willChange: "transform, opacity" }}
                             initial={SLOT_STYLES.farRight}
                             animate={SLOT_STYLES.right}
                             exit={SLOT_STYLES.farRight}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Team from "@/components/AboutUs/Team";
 import { Poppins } from "next/font/google";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { 
@@ -446,6 +447,8 @@ export default function TeacherTraining() {
 
           </div>
         </section>
+        
+        <Team />
 
         <Footer />
       </div>

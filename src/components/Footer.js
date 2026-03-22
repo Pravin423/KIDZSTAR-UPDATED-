@@ -156,6 +156,12 @@ const Footer = () => {
   const rocketProgress = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
   const rocketPathLength = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
 
+  // The rocket path sweeps from top-right, zig-zags across the full footer,
+  // and ends at approx (-320, 1500) — behind the Earth which sits at -ml-80 (-320px) bottom-left.
+  // The rocket's z-index (z-[4]) is intentionally BELOW the Earth wrapper (z-10)
+  // so the rocket disappears behind the Earth at the end.
+  const ROCKET_PATH = "M 1800 80 C 1400 160, 1050 40, 700 260 C 350 480, 950 680, 580 920 C 300 1100, 80 1180, -320 1500";
+
   return (
     <div>
 
@@ -207,49 +213,54 @@ const Footer = () => {
         className="hidden md:flex flex-col justify-end bg-[#000E30] bg-[url('/dd.png')] bg-repeat-space bg-cover overflow-hidden bg-center relative pt-[150px] lg:pt-[200px] xl:pt-[250px]"
       >
 
-        {/* ── Scroll Path & Rocket ── */}
-        <div className="absolute top-0 left-0 w-full h-[1200px] pointer-events-none overflow-visible z-[5]">
-            <svg width="100%" height="1200" className="absolute top-0 left-0 overflow-visible">
-                {/* Outer Red Glow */}
-                <motion.path 
-                    style={{ pathLength: rocketPathLength }}
-                    d="M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200" 
-                    fill="none" 
-                    stroke="#FF0000" 
-                    strokeWidth="24"
-                    opacity="0.25"
-                />
-                {/* Mid Orange Glow */}
-                <motion.path 
-                    style={{ pathLength: rocketPathLength }}
-                    d="M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200" 
-                    fill="none" 
-                    stroke="#FFA500" 
-                    strokeWidth="12"
-                    opacity="0.6"
-                />
-                 {/* Inner Yellow Core */}
-                <motion.path 
-                    style={{ pathLength: rocketPathLength }}
-                    d="M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200" 
-                    fill="none" 
-                    stroke="#FFF005" 
-                    strokeWidth="3.5" 
-                />
-            </svg>
-            <motion.div
-                className="absolute top-0 left-0 z-[6] drop-shadow-3xl"
-                style={{
-                    offsetPath: 'path("M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200")',
-                    offsetDistance: rocketProgress,
-                    offsetRotate: "auto",
-                    willChange: "transform"
-                }}
-            >
-                <div style={{ position: "absolute", left: "-100px", top: "-100px", width: "200px", height: "200px", transform: "rotate(90deg)" }}>
-                    <img src="/rocket_edit.gif" alt="Rocket" width="200" height="200" className="object-contain drop-shadow-xl" style={{ transform: "translate(0px, -20px)" }} />
-                </div>
-            </motion.div>
+        {/* ── Scroll Path & Rocket ──
+            Container height matches the path's Y extent (~1500px).
+            Rocket z-[4] sits BELOW Earth (z-10) so it hides behind it at journey's end.
+        ── */}
+        <div className="absolute top-0 left-0 w-full h-[1600px] pointer-events-none overflow-visible z-[5]">
+          <svg width="100%" height="1600" className="absolute top-0 left-0 overflow-visible">
+            {/* Outer Red Glow */}
+            <motion.path
+              style={{ pathLength: rocketPathLength }}
+              d={ROCKET_PATH}
+              fill="none"
+              stroke="#FF0000"
+              strokeWidth="24"
+              opacity="0.25"
+            />
+            {/* Mid Orange Glow */}
+            <motion.path
+              style={{ pathLength: rocketPathLength }}
+              d={ROCKET_PATH}
+              fill="none"
+              stroke="#FFA500"
+              strokeWidth="12"
+              opacity="0.6"
+            />
+            {/* Inner Yellow Core */}
+            <motion.path
+              style={{ pathLength: rocketPathLength }}
+              d={ROCKET_PATH}
+              fill="none"
+              stroke="#FFF005"
+              strokeWidth="3.5"
+            />
+          </svg>
+
+          {/* Rocket — z-[4] so it slides BEHIND Earth (Earth wrapper is z-10) */}
+          <motion.div
+            className="absolute top-0 left-0 z-[4] drop-shadow-3xl"
+            style={{
+              offsetPath: `path("${ROCKET_PATH}")`,
+              offsetDistance: rocketProgress,
+              offsetRotate: "auto",
+              willChange: "transform",
+            }}
+          >
+            <div style={{ position: "absolute", left: "-100px", top: "-100px", width: "200px", height: "200px", transform: "rotate(90deg)" }}>
+              <img src="/rocket_edit.gif" alt="Rocket" width="200" height="200" className="object-contain drop-shadow-xl" style={{ transform: "translate(0px, -20px)" }} />
+            </div>
+          </motion.div>
         </div>
 
         {/* Top Middle Content: The requested content right in the stars */}
@@ -259,7 +270,7 @@ const Footer = () => {
 
         {/* Bottom Elements: Earth and Form side-by-side */}
         <div className="flex justify-between items-end w-full relative z-10">
-          {/* Earth (bottom left) */}
+          {/* Earth (bottom left) — z-10 naturally sits above rocket z-[4] */}
           <div className="relative -mb-96 -ml-80 flex items-center justify-center pointer-events-none">
             <Image
               src="/earthbig.png"

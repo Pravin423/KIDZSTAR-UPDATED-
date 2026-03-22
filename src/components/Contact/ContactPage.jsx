@@ -119,7 +119,7 @@ const branches = [
     name: "Thane – Sawarkar Nagar",
     address: "Sawarkar Nagar, Thane, Maharashtra",
     // ↓ Replace this src with your actual Google Maps iframe src
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.022!2d72.96!3d19.21!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zS2lkelN0YXI!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15228.028528765022!2d72.952698!3d19.205698!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b9e4a789d0c5%3A0xa93541f84765b135!2sKIDZSTAR%20PRE%20PRIMARY%20SCHOOL!5e1!3m2!1sen!2sin!4v1774151425272!5m2!1sen!2sin",
     color: "#FF6D92",
   },
   {

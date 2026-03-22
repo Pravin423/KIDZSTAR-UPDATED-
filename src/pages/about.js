@@ -8,6 +8,7 @@ import Team from "@/components/AboutUs/Team";
 import Curriculum from "@/components/AboutUs/Curriculum";
 import PhotoGallery from "@/components/AboutUs/PhotoGallery";
 import CreativeSurroundings from "@/components/AboutUs/CreativeSurroundings";
+import BestFacilities from "@/components/AboutUs/BestFacilities";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import CatChatbot from "@/components/CatChatbot";
 
@@ -125,7 +126,12 @@ export default function About() {
           <Vision />
         </div>
 
-        {/* Step 5: Team */}
+        {/* Step 4b: Best Facilities */}
+        <div className="relative z-20">
+          <BestFacilities />
+        </div>
+
+        {/* Step 5: Team (Dream Teacher) */}
         <div className="relative z-20 bg-white pb-20">
           <Team />
         </div>

@@ -1,5 +1,7 @@
-import React from 'react';
+'use client';
+import React, { useRef } from 'react';
 import Image from 'next/image';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import EnquiryForm from './EnquiryForm';
 import { Poppins } from 'next/font/google';
 import Link from 'next/link';
@@ -144,6 +146,16 @@ const FooterContent = () => (
 );
 
 const Footer = () => {
+  const containerRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+      target: containerRef,
+      offset: ["start end", "end start"]
+  });
+
+  const rocketProgress = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
+  const rocketPathLength = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
+
   return (
     <div>
 
@@ -190,7 +202,55 @@ const Footer = () => {
       </div>
 
       {/* ── DESKTOP LAYOUT ── */}
-      <div className="hidden md:flex flex-col justify-end bg-[#000E30] bg-[url('/dd.png')] bg-repeat-space bg-cover overflow-hidden bg-center relative pt-[150px] lg:pt-[200px] xl:pt-[250px]">
+      <div 
+        ref={containerRef}
+        className="hidden md:flex flex-col justify-end bg-[#000E30] bg-[url('/dd.png')] bg-repeat-space bg-cover overflow-hidden bg-center relative pt-[150px] lg:pt-[200px] xl:pt-[250px]"
+      >
+
+        {/* ── Scroll Path & Rocket ── */}
+        <div className="absolute top-0 left-0 w-full h-[1200px] pointer-events-none overflow-visible z-[5]">
+            <svg width="100%" height="1200" className="absolute top-0 left-0 overflow-visible">
+                {/* Outer Red Glow */}
+                <motion.path 
+                    style={{ pathLength: rocketPathLength }}
+                    d="M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200" 
+                    fill="none" 
+                    stroke="#FF0000" 
+                    strokeWidth="24"
+                    opacity="0.25"
+                />
+                {/* Mid Orange Glow */}
+                <motion.path 
+                    style={{ pathLength: rocketPathLength }}
+                    d="M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200" 
+                    fill="none" 
+                    stroke="#FFA500" 
+                    strokeWidth="12"
+                    opacity="0.6"
+                />
+                 {/* Inner Yellow Core */}
+                <motion.path 
+                    style={{ pathLength: rocketPathLength }}
+                    d="M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200" 
+                    fill="none" 
+                    stroke="#FFF005" 
+                    strokeWidth="3.5" 
+                />
+            </svg>
+            <motion.div
+                className="absolute top-0 left-0 z-[6] drop-shadow-3xl"
+                style={{
+                    offsetPath: 'path("M 1800 100 C 1400 200, 900 100, 500 500 S 200 1000, -100 1200")',
+                    offsetDistance: rocketProgress,
+                    offsetRotate: "auto",
+                    willChange: "transform"
+                }}
+            >
+                <div style={{ position: "absolute", left: "-100px", top: "-100px", width: "200px", height: "200px", transform: "rotate(90deg)" }}>
+                    <img src="/rocket_edit.gif" alt="Rocket" width="200" height="200" className="object-contain drop-shadow-xl" style={{ transform: "translate(0px, -20px)" }} />
+                </div>
+            </motion.div>
+        </div>
 
         {/* Top Middle Content: The requested content right in the stars */}
         <div className="w-full z-20 relative">
@@ -207,6 +267,7 @@ const Footer = () => {
               width={1000}
               height={1000}
               className="object-contain animate-[spin_60s_linear_infinite]"
+              style={{ willChange: "transform" }}
             />
           </div>
 

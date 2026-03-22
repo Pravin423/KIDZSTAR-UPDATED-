@@ -3,7 +3,7 @@ import Gallery from "@/models/Gallery";
 import cloudinary from "@/lib/cloudinary";
 import { getSession } from "next-auth/react";
 import { IncomingForm } from "formidable";
-
+import { GoogleGenAI } from "@google/genai";
 import fs from "fs";
 
 export const config = {
@@ -63,6 +63,32 @@ if (req.method === "POST") {
 
     const fileBuffer = await fs.promises.readFile(file.filepath);
 
+    // AI AUTO CAPTIONING
+    let aiCaption = "";
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        console.log("Analyzing image with Gemini Vision AI...");
+        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+        const mimeType = file.mimetype || "image/jpeg";
+        const response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: [
+            "You are an expert at creating adorable, brief captions for a preschool photo gallery. Create a 3 to 6 word cheerful caption describing what is visually happening in this photo. Do not use quotes, hashtags, or punctuation marks except maybe an exclamation point.",
+            {
+              inlineData: {
+                data: fileBuffer.toString("base64"),
+                mimeType: mimeType,
+              },
+            },
+          ],
+        });
+        aiCaption = response.text.trim();
+        console.log("Generated Caption:", aiCaption);
+      } catch (aiErr) {
+        console.warn("AI Captioning failed, skipping...", aiErr);
+      }
+    }
+
     const result = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
         { folder: "preschool-gallery" },
@@ -76,6 +102,7 @@ if (req.method === "POST") {
     const newImage = await Gallery.create({
       imageUrl: result.secure_url,
       publicId: result.public_id,
+      caption: aiCaption || null,
     });
 
     return res.status(200).json(newImage);

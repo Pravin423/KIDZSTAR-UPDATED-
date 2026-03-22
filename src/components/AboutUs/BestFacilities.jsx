@@ -76,7 +76,7 @@ function Star({ x, y, size, delay }) {
 
 // ── Glassmorphism facility card ───────────────────────────────────────────────
 function FacilityCard({ facility, index }) {
-  const ref    = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   // Alternate: even cards slide from left, odd from right
@@ -162,7 +162,7 @@ function FacilityCard({ facility, index }) {
 
 // ── Animated section heading ──────────────────────────────────────────────────
 function SectionHeading() {
-  const ref    = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const words = ["Best", "Facilities", "For", "Kids"];
@@ -236,28 +236,28 @@ function SectionHeading() {
 export default function BestFacilities() {
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  
+
   // Parallax the star field
   const starsY = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
 
   // Fixed set of stars so no hydration mismatch
   const stars = [
-    { x: 5,  y: 10, size: 2,   delay: 0 },
+    { x: 5, y: 10, size: 2, delay: 0 },
     { x: 15, y: 80, size: 1.5, delay: 0.3 },
-    { x: 25, y: 30, size: 3,   delay: 0.8 },
-    { x: 40, y: 60, size: 1,   delay: 0.2 },
+    { x: 25, y: 30, size: 3, delay: 0.8 },
+    { x: 40, y: 60, size: 1, delay: 0.2 },
     { x: 55, y: 15, size: 2.5, delay: 1.1 },
-    { x: 65, y: 75, size: 2,   delay: 0.6 },
+    { x: 65, y: 75, size: 2, delay: 0.6 },
     { x: 75, y: 40, size: 1.5, delay: 0.9 },
-    { x: 85, y: 20, size: 3,   delay: 0.4 },
-    { x: 90, y: 85, size: 1,   delay: 1.5 },
-    { x: 10, y: 55, size: 2,   delay: 0.7 },
+    { x: 85, y: 20, size: 3, delay: 0.4 },
+    { x: 90, y: 85, size: 1, delay: 1.5 },
+    { x: 10, y: 55, size: 2, delay: 0.7 },
     { x: 50, y: 90, size: 1.5, delay: 1.2 },
-    { x: 80, y: 60, size: 2,   delay: 0.1 },
-    { x: 35, y: 45, size: 1,   delay: 1.8 },
-    { x: 70, y: 8,  size: 2.5, delay: 0.5 },
-    { x: 20, y: 95, size: 1,   delay: 1.0 },
-    { x: 95, y: 50, size: 2,   delay: 1.4 },
+    { x: 80, y: 60, size: 2, delay: 0.1 },
+    { x: 35, y: 45, size: 1, delay: 1.8 },
+    { x: 70, y: 8, size: 2.5, delay: 0.5 },
+    { x: 20, y: 95, size: 1, delay: 1.0 },
+    { x: 95, y: 50, size: 2, delay: 1.4 },
   ];
 
   return (

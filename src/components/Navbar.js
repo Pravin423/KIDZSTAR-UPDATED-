@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import AnimatedLogo from "./AnimatedLogo";
 import { Poppins } from "next/font/google";
 import { ChevronsRight, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -77,7 +78,7 @@ export default function Navbar({ className, disableScrollEffect = false }) {
       <nav className={`${className} flex items-center justify-between px-4 md:px-10 py-4 transition-all duration-1000 ease-in-out text-white ${isScrolled && !disableScrollEffect ? "bg-[#000E30] shadow-md" : "bg-transparent"
         }`}>
 
-        {/* Brand Section */}
+        {/* Brand Section Animated */}
         <div className="flex items-center gap-3">
           <Image
             src="/kidzstar_logo.png"
@@ -86,13 +87,7 @@ export default function Navbar({ className, disableScrollEffect = false }) {
             height={65}
             className="object-contain w-[45px] h-[45px] md:w-[65px] md:h-[65px]"
           />
-          <Image
-            src="/title.png"
-            alt="KidzStar Title"
-            width={103}
-            height={45}
-            className="object-contain w-[75px] md:w-[103px]"
-          />
+          <AnimatedLogo />
         </div>
 
         {/* Desktop Navigation Links — unchanged, hidden on mobile */}
@@ -162,7 +157,7 @@ export default function Navbar({ className, disableScrollEffect = false }) {
             >
               {/* Sidebar Header */}
               <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 transform scale-90 origin-left">
                   <Image
                     src="/kidzstar_logo.png"
                     alt="KidzStar Logo"
@@ -170,13 +165,7 @@ export default function Navbar({ className, disableScrollEffect = false }) {
                     height={40}
                     className="object-contain"
                   />
-                  <Image
-                    src="/title.png"
-                    alt="KidzStar Title"
-                    width={80}
-                    height={35}
-                    className="object-contain"
-                  />
+                  <AnimatedLogo />
                 </div>
                 <button
                   onClick={() => setSidebarOpen(false)}

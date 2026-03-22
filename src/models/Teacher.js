@@ -5,6 +5,8 @@ const TeacherSchema = new mongoose.Schema({
   email: String,
   phone: String,
   qualification: String,
+  location: String,
+  course: String,
 }, { timestamps: true });
 
 export default mongoose.models.Teacher ||

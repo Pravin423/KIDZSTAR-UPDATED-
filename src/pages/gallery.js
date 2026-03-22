@@ -97,15 +97,38 @@ export default function GalleryPage() {
         {/* Content Section - Uses Solid Background to hide the video gracefully */}
         <div className="relative z-20 bg-[#0D3697] w-full pt-16 pb-20">
 
-          <div className="flex flex-col items-center justify-center text-center px-4 mb-14">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#E6AF2E] tracking-tight mb-4">
+          <div className="flex flex-col items-center justify-center text-center px-4 mb-16 relative">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="inline-block bg-[#FF6D92]/15 border border-[#FF6D92]/30 text-[#FF6D92] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5"
+            >
+              Memories & Moments
+            </motion.span>
+
+            <motion.h2 
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+              className="text-4xl md:text-6xl font-extrabold tracking-tight mb-5 pb-1 text-transparent bg-clip-text bg-gradient-to-r from-[#E6AF2E] via-[#ffcf5d] to-[#FF6D92]"
+              style={{ filter: "drop-shadow(0 4px 20px rgba(230,175,46,0.25))" }}
+            >
               Our Gallery
-            </h2>
-            <div className="w-24 h-1.5 bg-[#FF6D92] rounded-full mb-6 shadow-[0_0_10px_rgba(255,109,146,0.6)]"></div>
-            <p className="text-sm md:text-base text-white/80 max-w-xl text-center leading-relaxed">
+            </motion.h2>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="text-base md:text-lg text-[#A3B1D5] max-w-2xl text-center leading-relaxed font-medium"
+            >
               A glimpse into the joy, creativity, and exploration that happens every
               day in our classrooms. Click on any image to view it closer.
-            </p>
+            </motion.p>
           </div>        {/* Gallery Grid Section */}
           <div className="w-full px-4 sm:px-6 md:px-12 lg:px-16 pb-10">
             {loading ? (

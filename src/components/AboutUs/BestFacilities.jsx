@@ -96,6 +96,7 @@ function FacilityCard({ facility, index }) {
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
         boxShadow: `0 8px 40px rgba(0,0,0,0.3), 0 0 0 0 ${facility.glowColor}`,
+        willChange: "transform, opacity",
       }}
     >
       {/* Glow blob on hover */}
@@ -272,25 +273,23 @@ export default function BestFacilities() {
       </motion.div>
 
       {/* ── Large nebula blobs ─────────────────────────────────────────── */}
-      <motion.div
+      <div
         className="absolute pointer-events-none rounded-full"
         style={{
           width: 600, height: 600,
           top: "-20%", left: "-10%",
-          background: "radial-gradient(circle, rgba(255,109,146,0.1) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(255,109,146,0.12) 0%, transparent 70%)",
+          willChange: "transform",
         }}
-        animate={{ scale: [1, 1.15, 1], rotate: [0, 20, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
-      <motion.div
+      <div
         className="absolute pointer-events-none rounded-full"
         style={{
           width: 500, height: 500,
           bottom: "-15%", right: "-8%",
-          background: "radial-gradient(circle, rgba(230,175,46,0.1) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(230,175,46,0.12) 0%, transparent 70%)",
+          willChange: "transform",
         }}
-        animate={{ scale: [1, 1.2, 1], rotate: [0, -20, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
 
       {/* ── Content ────────────────────────────────────────────────────── */}

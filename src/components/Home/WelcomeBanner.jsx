@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image'
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Poppins } from "next/font/google";
 import { ADLaM_Display } from "next/font/google";
 import { ChevronsRight } from "lucide-react";
@@ -18,8 +18,19 @@ const adlam = ADLaM_Display({
 });
 
 const WelcomeBanner = () => {
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"]
+    });
+
+    // Make the rocket fly completely through while the banner is visibly central on screen
+    const rocketProgress = useTransform(scrollYProgress, [0.3, 0.8], ["0%", "100%"]);
+    const rocketPathLength = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
+
     return (
         <motion.div
+            ref={containerRef}
             className="overflow-hidden flex flex-col"
             initial={{ y: 200, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -113,9 +124,54 @@ const WelcomeBanner = () => {
 
             {/* ── DESKTOP Layout: 100% original, unchanged ── */}
             <div
-                className="hidden md:flex w-full h-[764px] bg-white rounded-sm items-center justify-center mt-[-10px] bg-cover bg-center bg-no-repeat"
+                className="hidden md:flex relative w-full h-[764px] bg-white rounded-sm items-center justify-center mt-[-10px] bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: "url('/welcomebackground.png')" }}
             >
+                {/* ── Scroll Path & Rocket ── */}
+                <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-[5]">
+                    <svg width="100%" height="764" className="absolute top-0 left-0 overflow-visible">
+                        {/* Outer Red Glow */}
+                        <motion.path 
+                            style={{ pathLength: rocketPathLength }}
+                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600" 
+                            fill="none" 
+                            stroke="#FF0000" 
+                            strokeWidth="24"
+                            opacity="0.25"
+                        />
+                        {/* Mid Orange Glow */}
+                        <motion.path 
+                            style={{ pathLength: rocketPathLength }}
+                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600" 
+                            fill="none" 
+                            stroke="#FFA500" 
+                            strokeWidth="12"
+                            opacity="0.6"
+                        />
+                         {/* Inner Yellow Core */}
+                        <motion.path 
+                            style={{ pathLength: rocketPathLength }}
+                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600" 
+                            fill="none" 
+                            stroke="#FFF005" 
+                            strokeWidth="3.5" 
+                        />
+                    </svg>
+
+                    <motion.div
+                        className="absolute top-0 left-0 z-[6] drop-shadow-3xl"
+                        style={{
+                            offsetPath: 'path("M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600")',
+                            offsetDistance: rocketProgress,
+                            offsetRotate: "auto",
+                            willChange: "transform"
+                        }}
+                    >
+                        <div style={{ position: "absolute", left: "-100px", top: "-100px", width: "200px", height: "200px", transform: "rotate(90deg)" }}>
+                            <img src="/rocket_edit.gif" alt="Rocket" width="200" height="200" className="object-contain drop-shadow-xl" style={{ transform: "translate(0px, -20px)" }} />
+                        </div>
+                    </motion.div>
+                </div>
                 <div className='flex flex-col md:flex-row w-full items-center justify-between px-10 md:px-20'>
                     <motion.div
                         initial={{ x: -200, opacity: 0, scale: 1, y: 0 }}
@@ -132,11 +188,12 @@ const WelcomeBanner = () => {
                             scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
                             y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
                         }}
+                        style={{ willChange: "transform" }}
                         className='mt-[-100px] md:mt-[-200px]'>
                         <Image src="/colorchild.png" alt="ColorHand" width={536} height={453} className="object-contain" />
                     </motion.div>
 
-                    <div className="flex items-center ml-[100px] mt-[-180px] justify-center gap-2 md:gap-4 flex-1 w-full">
+                    <div className="flex items-center ml-[100px] mt-[-180px] justify-center gap-2 md:gap-4 flex-1 w-full relative z-10">
 
                         {/* Left Text Section */}
                         <motion.div
@@ -213,6 +270,7 @@ const WelcomeBanner = () => {
                                         y: [0, -15, 0],
                                         rotate: [0, 5, 0, -5, 0]
                                     }}
+                                    style={{ willChange: "transform" }}
                                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                                 >
                                     <Image

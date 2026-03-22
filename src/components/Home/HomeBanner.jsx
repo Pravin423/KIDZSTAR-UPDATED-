@@ -192,7 +192,7 @@ const HomeBanner = () => {
 
                         <motion.div
                             className="relative w-[70%] h-[70%] mt-10"
-                            style={{ scale: kidScale }}
+                            style={{ scale: kidScale, willChange: "transform" }}
                             animate={{
                                 y: [0, -20, 0],
                             }}
@@ -215,6 +215,7 @@ const HomeBanner = () => {
                 <div className='relative z-20 mt-[-130px] md:mt-[-300px] w-fit drop-shadow-2xl'>
                     <motion.div
                         animate={{ rotate: 360 }}
+                        style={{ willChange: "transform" }}
                         transition={{
                             duration: 20,
                             ease: "linear",

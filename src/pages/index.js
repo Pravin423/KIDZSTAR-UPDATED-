@@ -24,7 +24,7 @@ export default function Home() {
           <WelcomeBanner />
         </div>
         {/* Cloud — desktop only */}
-        <div className="hidden md:block md:mt-[-160px]">
+        <div className="hidden md:block md:mt-[-160px] relative z-10">
           <Cloud />
         </div>
 

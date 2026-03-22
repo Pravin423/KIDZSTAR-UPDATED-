@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,6 +26,13 @@ const Details = () => {
         { src: "/child3.png", backSrc: "/child3_back.png", mt: "mt-[-90px]" },
         { src: "/child4.png", backSrc: "/child4_back.png", mt: "mt-[150px]" },
     ];
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"]
+    });
+    const rocketProgress = useTransform(scrollYProgress, [0.1, 0.9], ["0%", "100%"]);
+    const rocketPathLength = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
 
     // Desktop GSAP scroll-entry + auto-flip
     useEffect(() => {
@@ -146,8 +154,53 @@ const Details = () => {
 
             <div
                 ref={containerRef}
-                className="hidden md:flex w-full h-[950px] bg-[#ACD8FA] items-center justify-center overflow-hidden"
+                className="hidden md:flex relative w-full h-[950px] bg-[#ACD8FA] items-center justify-center overflow-hidden"
             >
+                {/* ── Scroll Path & Rocket ── */}
+                <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-[5]">
+                    <svg width="100%" height="950" className="absolute top-0 left-0 overflow-visible">
+                        {/* Outer Red Glow */}
+                        <motion.path 
+                            style={{ pathLength: rocketPathLength }}
+                            d="M -50 0 C 200 400, 400 850, 800 850 S 1300 850, 1800 750" 
+                            fill="none" 
+                            stroke="#FF0000" 
+                            strokeWidth="24"
+                            opacity="0.25"
+                        />
+                        {/* Mid Orange Glow */}
+                        <motion.path 
+                            style={{ pathLength: rocketPathLength }}
+                            d="M -50 0 C 200 400, 400 850, 800 850 S 1300 850, 1800 750" 
+                            fill="none" 
+                            stroke="#FFA500" 
+                            strokeWidth="12"
+                            opacity="0.6"
+                        />
+                         {/* Inner Yellow Core */}
+                        <motion.path 
+                            style={{ pathLength: rocketPathLength }}
+                            d="M -50 0 C 200 400, 400 850, 800 850 S 1300 850, 1800 750" 
+                            fill="none" 
+                            stroke="#FFF005" 
+                            strokeWidth="3.5" 
+                        />
+                    </svg>
+                    <motion.div
+                        className="absolute top-0 left-0 z-[6] drop-shadow-3xl"
+                        style={{
+                            offsetPath: 'path("M -50 0 C 200 400, 400 850, 800 850 S 1300 850, 1800 750")',
+                            offsetDistance: rocketProgress,
+                            offsetRotate: "auto",
+                            willChange: "transform"
+                        }}
+                    >
+                        <div style={{ position: "absolute", left: "-100px", top: "-100px", width: "200px", height: "200px", transform: "rotate(90deg)" }}>
+                            <img src="/rocket_edit.gif" alt="Rocket" width="200" height="200" className="object-contain drop-shadow-xl" style={{ transform: "translate(0px, -20px)" }} />
+                        </div>
+                    </motion.div>
+                </div>
+
                 {/* Center Bino character */}
                 <Image
                     ref={binoRef}
@@ -155,11 +208,11 @@ const Details = () => {
                     alt="kid"
                     width={209}
                     height={333}
-                    className="object-contain mt-[630px] ml-[100px]"
+                    className="object-contain mt-[630px] ml-[100px] relative z-10"
                 />
 
                 {/* 4-column card grid */}
-                <div className="grid grid-cols-4 w-full items-end px-10">
+                <div className="grid grid-cols-4 w-full items-end px-10 relative z-10">
                     {cards.map((child, index) => (
                         <div
                             key={`desk-${index}`}

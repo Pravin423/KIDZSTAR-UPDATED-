@@ -640,7 +640,7 @@ function ContactCard({ item }) {
       <p className="text-[#FF6D92] text-xs font-bold uppercase tracking-widest mb-1">
         {item.label}
       </p>
-      <p className="text-white text-sm font-medium leading-relaxed whitespace-pre-line">
+      <p className="text-white text-sm font-medium leading-relaxed whitespace-pre-line break-all">
         {item.value}
       </p>
     </>

@@ -116,24 +116,24 @@ const EnquiryForm = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700">Child's Name</label>
-                      <input name="childName" placeholder="Enter name" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all" required />
+                      <input name="childName" placeholder="Enter name" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all text-gray-800 placeholder-gray-400" required />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700">Parent's Name</label>
-                      <input name="parentName" placeholder="Enter name" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all" required />
+                      <input name="parentName" placeholder="Enter name" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all text-gray-800 placeholder-gray-400" required />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700">Email Address</label>
-                      <input name="email" type="email" placeholder="email@example.com" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all" required />
+                      <input name="email" type="email" placeholder="email@example.com" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all text-gray-800 placeholder-gray-400" required />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700">Phone Number</label>
-                      <input name="phone" placeholder="Phone" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all" required />
+                      <input name="phone" placeholder="Phone" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all text-gray-800 placeholder-gray-400" required />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-gray-700">Message (Optional)</label>
-                    <textarea name="message" rows="3" placeholder="Any specific requirements?" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all" />
+                    <textarea name="message" rows="3" placeholder="Any specific requirements?" onChange={handleChange} className="w-full border-2 border-gray-100 p-3 rounded-xl focus:border-pink-400 outline-none transition-all text-gray-800 placeholder-gray-400" />
                   </div>
                   <button className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-pink-200 transition-all transform hover:-translate-y-1">
                     Submit Application

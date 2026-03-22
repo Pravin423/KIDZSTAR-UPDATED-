@@ -121,7 +121,7 @@ const FooterContent = () => (
 
             <div className="flex items-start justify-center md:justify-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
               <span className="text-[#FF6D92] mt-0.5"><EmailIcon /></span>
-              <a href="mailto:kidzstarpreprimaryschool@gmail.com" className="hover:text-white transition-colors break-all sm:break-normal">
+              <a href="mailto:kidzstarpreprimaryschool@gmail.com" className="hover:text-white transition-colors break-all">
                 kidzstarpreprimaryschool@gmail.com
               </a>
             </div>

@@ -22,7 +22,7 @@ const SLIDE_DURATION = 8000;
 /* ─────────────────────────────────────────────
    Load the Houdini Ring-Particles worklet once.
    Module-level flag survives re-renders / HMR.
-───────────────────────────────────────────── */
+ ───────────────────────────────────────────── */
 let workletLoaded = false;
 
 function useRingParticlesWorklet() {
@@ -41,7 +41,7 @@ function useRingParticlesWorklet() {
 
 /* ─────────────────────────────────────────────
    Dot indicator
-───────────────────────────────────────────── */
+ ───────────────────────────────────────────── */
 function SlideDots({ total, current, onSelect }) {
   return (
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-3">
@@ -67,8 +67,127 @@ function SlideDots({ total, current, onSelect }) {
 }
 
 /* ─────────────────────────────────────────────
-   Slide 1 — Original Admission Hero
+   Star Background Component
 ───────────────────────────────────────────── */
+function StarBackground() {
+  const colors = ["#ffffff", "#fff4e6", "#e6f8ff", "#f3e8ff"];
+  
+  return (
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#030014]">
+      {/* 1. Deep space base with subtle radial glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(15,23,42,0.8)_0%,_rgba(3,0,20,1)_100%)]" />
+
+      {/* 2. Denser distant background stars (Subtle blinking) */}
+      {[...Array(250)].map((_, i) => (
+        <motion.div
+          key={`distant-${i}`}
+          className="absolute rounded-full bg-white"
+          initial={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            width: `${Math.random() * 1.2 + 0.3}px`,
+            height: `${Math.random() * 1.2 + 0.3}px`,
+            opacity: Math.random() * 0.15 + 0.05
+          }}
+          animate={{
+            opacity: [null, 0.25, 0.05, 0.25, null]
+          }}
+          transition={{
+            duration: 2 + Math.random() * 4,
+            repeat: Infinity,
+            delay: Math.random() * 5,
+            ease: "linear"
+          }}
+        />
+      ))}
+      
+      {/* 3. Mid-ground twinkling stars (Faster blinking) */}
+      {[...Array(150)].map((_, i) => {
+        const starColor = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 1.8 + 0.8;
+        return (
+          <motion.div
+            key={`mid-${i}`}
+            className="absolute rounded-full"
+            initial={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              opacity: Math.random() * 0.4 + 0.2,
+              scale: size / 2,
+            }}
+            animate={{
+              opacity: [null, 1, 0.3, 1, null],
+              scale: [null, 1.3, 0.8, 1.3, null],
+            }}
+            transition={{
+              duration: 1.5 + Math.random() * 2.5,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "easeInOut"
+            }}
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              backgroundColor: starColor,
+              boxShadow: `0 0 ${size * 4}px ${starColor}99`,
+            }}
+          />
+        );
+      })}
+
+      {/* 4. Large hero stars with diffraction spikes (Noticeable pulsing) */}
+      {[...Array(15)].map((_, i) => {
+        const starColor = colors[Math.floor(Math.random() * colors.length)];
+        return (
+          <motion.div
+            key={`hero-${i}`}
+            className="absolute"
+            initial={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              opacity: 0.15,
+              scale: 0.6,
+            }}
+            animate={{
+              opacity: [0.2, 1, 0.2],
+              scale: [0.8, 1.2, 0.8],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "easeInOut"
+            }}
+            style={{ width: '4px', height: '4px' }}
+          >
+            {/* Bright Core */}
+            <div 
+              className="absolute inset-0 rounded-full blur-[0.2px]" 
+              style={{ backgroundColor: starColor, boxShadow: `0 0 16px 2px ${starColor}` }} 
+            />
+            {/* Diffuse diffraction spikes */}
+            <div 
+              className="absolute top-1/2 left-[-500%] right-[-500%] h-[0.5px] -translate-y-1/2 blur-[1.5px] opacity-20"
+              style={{ background: `linear-gradient(to right, transparent, ${starColor}, transparent)` }}
+            />
+            <div 
+              className="absolute left-1/2 top-[-500%] bottom-[-500%] w-[0.5px] -translate-x-1/2 blur-[1.5px] opacity-20"
+              style={{ background: `linear-gradient(to bottom, transparent, ${starColor}, transparent)` }}
+            />
+          </motion.div>
+        );
+      })}
+
+      {/* Dust clouds / Nebulae (Subtle) */}
+      <div className="absolute top-[25%] left-[15%] w-[50%] h-[40%] bg-blue-500/5 blur-[160px] pointer-events-none mix-blend-screen" />
+      <div className="absolute bottom-[10%] right-[20%] w-[45%] h-[50%] bg-indigo-500/5 blur-[140px] pointer-events-none mix-blend-screen delay-1000" />
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Slide 1 — Original Admission Hero
+ ───────────────────────────────────────────── */
 function Slide1({ kidScale }) {
   return (
     <motion.div
@@ -88,7 +207,6 @@ function Slide1({ kidScale }) {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             className="flex items-center gap-4 mb-8"
           >
-
             <div className="h-6 w-[2px] bg-green-600 mx-4" />
             <span className={`${poppins.className} text-green-200 text-sm md:text-[20px] font-bold tracking-[0.3em] uppercase opacity-80`}>
               Admissions Live For 2026-2027
@@ -186,39 +304,6 @@ function Slide1({ kidScale }) {
         </div>
       </div>
 
-      {/* Background Decorative Particles */}
-      {[...Array(12)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute z-0 rounded-full bg-white/10 blur-[2px] pointer-events-none"
-          initial={{
-            x: Math.random() * 100 + "%",
-            y: Math.random() * 100 + "%",
-            scale: Math.random() * 1 + 0.5,
-            opacity: 0
-          }}
-          animate={{
-            y: ["-10%", "110%"],
-            opacity: [0, 0.4, 0],
-            rotate: 360
-          }}
-          transition={{
-            duration: 10 + Math.random() * 15,
-            repeat: Infinity,
-            delay: Math.random() * 10,
-            ease: "linear"
-          }}
-          style={{
-            width: Math.random() * 15 + 5 + "px",
-            height: Math.random() * 15 + 5 + "px",
-          }}
-        />
-      ))}
-
-      {/* Glowing Orbs */}
-      <div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-cyan-400/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-      <div className="absolute bottom-[10%] right-[30%] w-[500px] h-[500px] bg-[#FFF005]/5 rounded-full blur-[150px] -z-10 animate-pulse delay-1000" />
-
       {/* Spinning earth logo */}
       <div className="absolute -bottom-20 -left-20 z-0 opacity-20 pointer-events-none transition-opacity duration-1000">
         <motion.div
@@ -237,7 +322,7 @@ function Slide1({ kidScale }) {
 
 /* ─────────────────────────────────────────────
    Slide 2 — Antigravity Hero + Ring Particles
-───────────────────────────────────────────── */
+ ───────────────────────────────────────────── */
 function Slide2() {
   /* ── 3-D tilt (existing) ── */
   const cardRef = useRef(null);
@@ -444,7 +529,7 @@ function Slide2() {
 
 /* ─────────────────────────────────────────────
    Main Banner
-───────────────────────────────────────────── */
+ ───────────────────────────────────────────── */
 const HomeBanner = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const TOTAL_SLIDES = 2;
@@ -459,9 +544,12 @@ const HomeBanner = () => {
   const kidScale = 1;
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden relative min-h-screen bg-[#030014]">
+      {/* Global Space Background */}
+      <StarBackground />
+
       {/* ── Mobile Layout ── */}
-      <div className="flex md:hidden flex-col items-center justify-center min-h-screen text-center px-6 pt-[100px] pb-16">
+      <div className="flex md:hidden flex-col items-center justify-center min-h-screen text-center px-6 pt-[100px] pb-16 relative z-10">
         <AnimatePresence mode="wait">
           {activeSlide === 0 ? (
             <motion.div
@@ -477,10 +565,7 @@ const HomeBanner = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex items-center gap-3 mb-6"
               >
-                <div className="h-[2px] w-10 bg-[#FFF005] rounded-full shadow-[0_0_10px_rgba(255,240,5,0.4)]" />
-                <span className={`${poppins.className} text-[#FFF005] text-[12px] font-bold tracking-[0.2em] uppercase`}>
-                  A World of Wonder
-                </span>
+
                 <div className="h-4 w-[1px] bg-white/20 mx-2" />
                 <span className={`${poppins.className} text-white text-[11px] font-bold tracking-[0.1em] uppercase opacity-80`}>
                   Admissions Live
@@ -559,7 +644,7 @@ const HomeBanner = () => {
             </motion.div>
           )}
         </AnimatePresence>
-
+ 
         {/* Mobile dots */}
         <div className="flex gap-3 mt-8">
           {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
@@ -571,9 +656,9 @@ const HomeBanner = () => {
           ))}
         </div>
       </div>
-
+ 
       {/* ── Desktop Layout ── */}
-      <div className="hidden md:block relative w-full h-screen min-h-[700px]">
+      <div className="hidden md:block relative w-full h-screen min-h-[700px] z-10">
         <AnimatePresence mode="wait">
           {activeSlide === 0 ? (
             <Slide1 key="slide1" kidScale={kidScale} />
@@ -581,11 +666,11 @@ const HomeBanner = () => {
             <Slide2 key="slide2" />
           )}
         </AnimatePresence>
-
+ 
         <SlideDots total={TOTAL_SLIDES} current={activeSlide} onSelect={setActiveSlide} />
       </div>
     </div>
   );
 };
-
+ 
 export default HomeBanner;

@@ -78,7 +78,7 @@ function StarBackground() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(15,23,42,0.8)_0%,_rgba(3,0,20,1)_100%)]" />
 
       {/* 2. Denser distant background stars (Subtle blinking) */}
-      {[...Array(250)].map((_, i) => (
+      {[...Array(150)].map((_, i) => (
         <motion.div
           key={`distant-${i}`}
           className="absolute rounded-full bg-white"
@@ -87,10 +87,10 @@ function StarBackground() {
             left: `${Math.random() * 100}%`,
             width: `${Math.random() * 1.2 + 0.3}px`,
             height: `${Math.random() * 1.2 + 0.3}px`,
-            opacity: Math.random() * 0.15 + 0.05
+            opacity: Math.random() * 0.12 + 0.03
           }}
           animate={{
-            opacity: [null, 0.25, 0.05, 0.25, null]
+            opacity: [null, 0.2, 0.05, 0.2, null]
           }}
           transition={{
             duration: 2 + Math.random() * 4,
@@ -102,7 +102,7 @@ function StarBackground() {
       ))}
       
       {/* 3. Mid-ground twinkling stars (Faster blinking) */}
-      {[...Array(150)].map((_, i) => {
+      {[...Array(80)].map((_, i) => {
         const starColor = colors[Math.floor(Math.random() * colors.length)];
         const size = Math.random() * 1.8 + 0.8;
         return (
@@ -136,7 +136,7 @@ function StarBackground() {
       })}
 
       {/* 4. Large hero stars with diffraction spikes (Noticeable pulsing) */}
-      {[...Array(15)].map((_, i) => {
+      {[...Array(10)].map((_, i) => {
         const starColor = colors[Math.floor(Math.random() * colors.length)];
         return (
           <motion.div

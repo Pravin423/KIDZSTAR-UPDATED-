@@ -84,7 +84,7 @@ export default function About() {
         <Navbar className="fixed top-0 left-0 right-0 w-full z-30" disableScrollEffect={!isNavbarActive} />
 
         {/* Scroll container — ZoomScroll animations for all screens */}
-        <div className="relative h-[500vh] overflow-x-hidden">
+        <div className="relative h-[250vh] md:h-[400vh] overflow-x-hidden">
 
           {/* Fixed Background Video */}
           <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">

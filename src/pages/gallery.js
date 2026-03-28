@@ -95,7 +95,7 @@ export default function GalleryPage() {
         </div>
 
         {/* Content Section - Uses Solid Background to hide the video gracefully */}
-        <div className="relative z-20 bg-[#0D3697] w-full pt-16 pb-20">
+        <div className="relative z-20 bg-gray-900 w-full pt-16 pb-20">
 
           <div className="flex flex-col items-center justify-center text-center px-4 mb-16 relative">
             <motion.span 

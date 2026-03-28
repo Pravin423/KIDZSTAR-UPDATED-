@@ -11,11 +11,11 @@ export default function Home() {
   return (
     <>
       <Navbar className="fixed top-0 left-0 right-0 w-full z-50" />
-      <div className="bg-[#030014] overflow-x-hidden">
+      <div className="overflow-x-hidden">
         <div>
           <HomeBanner />
         </div>
-        <div>
+        <div className="mt-0 md:mt-[-200px]">
           <WelcomeBanner />
         </div>
         {/* Cloud — desktop only */}

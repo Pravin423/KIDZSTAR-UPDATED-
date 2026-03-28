@@ -71,14 +71,14 @@ function SlideDots({ total, current, onSelect }) {
 ───────────────────────────────────────────── */
 function StarBackground() {
   const colors = ["#ffffff", "#fff4e6", "#e6f8ff", "#f3e8ff"];
-  
+
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#030014]">
       {/* 1. Deep space base with subtle radial glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(15,23,42,0.8)_0%,_rgba(3,0,20,1)_100%)]" />
 
       {/* 2. Denser distant background stars (Subtle blinking) */}
-      {[...Array(150)].map((_, i) => (
+      {[...Array(100)].map((_, i) => (
         <motion.div
           key={`distant-${i}`}
           className="absolute rounded-full bg-white"
@@ -93,14 +93,15 @@ function StarBackground() {
             opacity: [null, 0.2, 0.05, 0.2, null]
           }}
           transition={{
-            duration: 2 + Math.random() * 4,
+            duration: 3 + Math.random() * 5,
             repeat: Infinity,
             delay: Math.random() * 5,
             ease: "linear"
           }}
+          style={{ willChange: "opacity", transform: "translateZ(0)" }}
         />
       ))}
-      
+
       {/* 3. Mid-ground twinkling stars (Faster blinking) */}
       {[...Array(80)].map((_, i) => {
         const starColor = colors[Math.floor(Math.random() * colors.length)];
@@ -116,11 +117,11 @@ function StarBackground() {
               scale: size / 2,
             }}
             animate={{
-              opacity: [null, 1, 0.3, 1, null],
-              scale: [null, 1.3, 0.8, 1.3, null],
+              opacity: [null, 0.8, 0.3, 0.8, null],
+              scale: [null, 1.2, 0.8, 1.2, null],
             }}
             transition={{
-              duration: 1.5 + Math.random() * 2.5,
+              duration: 2 + Math.random() * 3,
               repeat: Infinity,
               delay: Math.random() * 5,
               ease: "easeInOut"
@@ -129,7 +130,9 @@ function StarBackground() {
               width: `${size}px`,
               height: `${size}px`,
               backgroundColor: starColor,
-              boxShadow: `0 0 ${size * 4}px ${starColor}99`,
+              boxShadow: `0 0 ${size * 3}px ${starColor}`,
+              willChange: "transform, opacity",
+              transform: "translateZ(0)"
             }}
           />
         );
@@ -149,28 +152,28 @@ function StarBackground() {
               scale: 0.6,
             }}
             animate={{
-              opacity: [0.2, 1, 0.2],
-              scale: [0.8, 1.2, 0.8],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [0.8, 1.1, 0.8],
             }}
             transition={{
-              duration: 3 + Math.random() * 3,
+              duration: 4 + Math.random() * 4,
               repeat: Infinity,
               delay: Math.random() * 5,
               ease: "easeInOut"
             }}
-            style={{ width: '4px', height: '4px' }}
+            style={{ width: '4px', height: '4px', willChange: "transform, opacity", transform: "translateZ(0)" }}
           >
             {/* Bright Core */}
-            <div 
-              className="absolute inset-0 rounded-full blur-[0.2px]" 
-              style={{ backgroundColor: starColor, boxShadow: `0 0 16px 2px ${starColor}` }} 
+            <div
+              className="absolute inset-0 rounded-full blur-[0.2px]"
+              style={{ backgroundColor: starColor, boxShadow: `0 0 16px 2px ${starColor}` }}
             />
             {/* Diffuse diffraction spikes */}
-            <div 
+            <div
               className="absolute top-1/2 left-[-500%] right-[-500%] h-[0.5px] -translate-y-1/2 blur-[1.5px] opacity-20"
               style={{ background: `linear-gradient(to right, transparent, ${starColor}, transparent)` }}
             />
-            <div 
+            <div
               className="absolute left-1/2 top-[-500%] bottom-[-500%] w-[0.5px] -translate-x-1/2 blur-[1.5px] opacity-20"
               style={{ background: `linear-gradient(to bottom, transparent, ${starColor}, transparent)` }}
             />
@@ -218,8 +221,8 @@ function Slide1({ kidScale }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h1 className={`${poppins.className} text-7xl md:text-[145px] leading-[0.8] font-black text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)] uppercase mb-4 tracking-tighter`}>
-              Kidz<span className="text-[#FFF005] drop-shadow-[0_0_25px_rgba(255,240,5,0.4)]">star</span>
+            <h1 className={`${poppins.className} text-7xl md:text-[145px] leading-[0.8] font-black text-white uppercase mb-4 tracking-tighter`} style={{ textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+              Kidz<span className="text-[#FFF005]" style={{ textShadow: '0 0 25px rgba(255,240,5,0.4)' }}>star</span>
             </h1>
           </motion.div>
 
@@ -294,8 +297,8 @@ function Slide1({ kidScale }) {
             <Image src="/bannertrianglw.png" alt="Background Shape" width={2500} height={2500} className="object-contain" />
           </div>
           <motion.div
-            className="relative w-[80%] h-[80%] mt-10 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-            style={{ scale: kidScale, willChange: "transform" }}
+            className="relative w-[80%] h-[80%] mt-10"
+            style={{ scale: kidScale, willChange: "transform", transform: "translateZ(0)" }}
             animate={{ y: [0, -25, 0], rotate: [0, 1, 0, -1, 0] }}
             transition={{ duration: 5, ease: "easeInOut", repeat: Infinity }}
           >
@@ -644,7 +647,7 @@ const HomeBanner = () => {
             </motion.div>
           )}
         </AnimatePresence>
- 
+
         {/* Mobile dots */}
         <div className="flex gap-3 mt-8">
           {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
@@ -656,7 +659,7 @@ const HomeBanner = () => {
           ))}
         </div>
       </div>
- 
+
       {/* ── Desktop Layout ── */}
       <div className="hidden md:block relative w-full h-screen min-h-[700px] z-10">
         <AnimatePresence mode="wait">
@@ -666,11 +669,11 @@ const HomeBanner = () => {
             <Slide2 key="slide2" />
           )}
         </AnimatePresence>
- 
+
         <SlideDots total={TOTAL_SLIDES} current={activeSlide} onSelect={setActiveSlide} />
       </div>
     </div>
   );
 };
- 
+
 export default HomeBanner;

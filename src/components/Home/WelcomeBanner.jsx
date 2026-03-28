@@ -131,30 +131,30 @@ const WelcomeBanner = () => {
                 <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-[5]">
                     <svg width="100%" height="764" className="absolute top-0 left-0 overflow-visible">
                         {/* Outer Red Glow */}
-                        <motion.path 
+                        <motion.path
                             style={{ pathLength: rocketPathLength }}
-                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600" 
-                            fill="none" 
-                            stroke="#FF0000" 
+                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600"
+                            fill="none"
+                            stroke="#FF0000"
                             strokeWidth="24"
                             opacity="0.25"
                         />
                         {/* Mid Orange Glow */}
-                        <motion.path 
+                        <motion.path
                             style={{ pathLength: rocketPathLength }}
-                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600" 
-                            fill="none" 
-                            stroke="#FFA500" 
+                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600"
+                            fill="none"
+                            stroke="#FFA500"
                             strokeWidth="12"
                             opacity="0.6"
                         />
-                         {/* Inner Yellow Core */}
-                        <motion.path 
+                        {/* Inner Yellow Core */}
+                        <motion.path
                             style={{ pathLength: rocketPathLength }}
-                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600" 
-                            fill="none" 
-                            stroke="#FFF005" 
-                            strokeWidth="3.5" 
+                            d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600"
+                            fill="none"
+                            stroke="#FFF005"
+                            strokeWidth="3.5"
                         />
                     </svg>
 

@@ -18,8 +18,8 @@ const HomeBanner = () => {
 
     // Map scroll perfectly to the 0%-100% path timeline
     // The shorter the scroll range (e.g. 0 to 350), the FASTER the rocket flies when scrolling!
-    const rocketProgress = useTransform(scrollY, [0, 350], ["0%", "100%"]);
-    const rocketPathLength = useTransform(scrollY, [0, 350], [0, 1]);
+    const rocketProgress = useTransform(scrollY, [0, 600], ["0%", "100%"]);
+    const rocketPathLength = useTransform(scrollY, [0, 600], [0, 1]);
 
     return (
         <div className="overflow-hidden">

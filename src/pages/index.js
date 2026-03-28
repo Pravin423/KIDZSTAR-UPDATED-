@@ -15,7 +15,7 @@ export default function Home() {
       <Navbar className="fixed top-0 left-0 right-0 w-full z-50" />
       <div className="bg-[#0D3697] overflow-x-hidden">
 
-        <div className="min-h-screen bg-[url('/homestars.png')] bg-cover bg-center text-center">
+        <div>
           <HomeBanner />
 
 

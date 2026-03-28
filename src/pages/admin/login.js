@@ -1,8 +1,26 @@
 import { signIn, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Mail, Lock, ShieldCheck, AlertCircle, Home } from "lucide-react";
+import { Mail, Lock, ShieldCheck, AlertCircle, Home, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
+
+function Star({ x, y, size, delay }) {
+  return (
+    <motion.div
+      className="absolute rounded-full bg-white pointer-events-none"
+      style={{ left: `${x}%`, top: `${y}%`, width: size, height: size, transform: "translateZ(0)" }}
+      animate={{ opacity: [0.1, 0.7, 0.1] }}
+      transition={{ duration: 3 + Math.random() * 4, delay, repeat: Infinity, ease: "linear" }}
+    />
+  );
+}
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -27,7 +45,6 @@ export default function AdminLogin() {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // Clear error when user starts typing
     if (error) setError("");
   };
 
@@ -45,119 +62,181 @@ export default function AdminLogin() {
     if (res.ok) {
       router.push("/admin/dashboard");
     } else {
-      setError("Invalid email or password. Please try again.");
+      setError("Unauthorized access attempt. Credentials invalid.");
       setLoading(false);
     }
   };
 
+  const stars = Array.from({ length: 40 }).map((_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    delay: Math.random() * 5
+  }));
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-8">
-      {/* Return to Home Button */}
-      <Link 
-        href="/"
-        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-50 transition-all"
-      >
-        <Home style={{ width: "20px", height: "20px" }} />
-        <span className="font-medium">Return to Home</span>
-      </Link>
-
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
-        {/* Header with Icon */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="bg-blue-500 p-4 rounded-full mb-4">
-            <ShieldCheck style={{ width: "40px", height: "40px", color: "white" }} />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-800">
-            Admin Login
-          </h2>
-          <p className="text-gray-500 mt-2 text-center">
-            Sign in to access the admin dashboard
-          </p>
-        </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-            <AlertCircle style={{ width: "20px", height: "20px", color: "#DC2626", flexShrink: 0, marginTop: "2px" }} />
-            <p className="text-red-600 text-sm">{error}</p>
-          </div>
-        )}
-
-        {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Field */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail style={{ width: "20px", height: "20px", color: "#9CA3AF" }} />
-              </div>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="admin@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                disabled={loading}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
-              />
-            </div>
-          </div>
-
-          {/* Password Field */}
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock style={{ width: "20px", height: "20px", color: "#9CA3AF" }} />
-              </div>
-              <input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                disabled={loading}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
-              />
-            </div>
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 transition-all disabled:bg-blue-300 disabled:cursor-not-allowed mt-6"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Signing in...
-              </span>
-            ) : (
-              "Sign In"
-            )}
-          </button>
-        </form>
-
-        {/* Footer */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">
-            Protected by secure authentication
-          </p>
-        </div>
+    <div className={`min-h-screen flex items-center justify-center bg-[#030014] overflow-hidden relative ${poppins.className}`}>
+      {/* ── Background Elements ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {stars.map((s) => <Star key={s.id} {...s} />)}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-blue-900/10 via-transparent to-purple-900/10" />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/5 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-600/5 blur-[120px] rounded-full" />
       </div>
+
+      {/* ── Return to Home ── */}
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="absolute top-8 left-8 z-50"
+      >
+        <Link 
+          href="/"
+          className="group flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white rounded-full border border-white/10 backdrop-blur-md transition-all duration-300"
+        >
+          <Home className="w-4 h-4" />
+          <span className="text-sm font-medium">Exit to Home</span>
+        </Link>
+      </motion.div>
+
+      {/* ── Main Login Card ── */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 w-full max-w-[440px] px-4"
+      >
+        {/* Glow behind card */}
+        <div className="absolute inset-0 bg-blue-500/10 blur-[80px] rounded-full -z-10" />
+
+        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] p-10 overflow-hidden relative">
+          {/* Subtle line decoration */}
+          <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#FFF005]/50 to-transparent" />
+
+          {/* Header Section */}
+          <div className="flex flex-col items-center mb-10 text-center">
+            <motion.div 
+              initial={{ rotate: -15, scale: 0 }}
+              animate={{ rotate: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+              className="w-20 h-20 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center mb-6 relative group"
+            >
+              <div className="absolute inset-0 bg-[#FFF005]/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <ShieldCheck className="w-10 h-10 text-[#FFF005] drop-shadow-[0_0_10px_rgba(255,240,5,0.4)]" />
+            </motion.div>
+            
+            <h2 className="text-3xl font-black text-white tracking-tight uppercase mb-2">
+              Admin <span className="text-[#FFF005]">Portal</span>
+            </h2>
+            <p className="text-white/40 text-sm font-medium tracking-wide">
+              Secure Gateway for Kidzstar Systems
+            </p>
+          </div>
+
+          {/* Error Message */}
+          <AnimatePresence>
+            {error && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="mb-8 overflow-hidden"
+              >
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                  <p className="text-red-400 text-xs font-medium tracking-wide">{error}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-2">
+                Identifier (Email)
+              </label>
+              <div className="relative group">
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[#FFF005] transition-colors" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="admin@kidzstar.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#FFF005]/50 rounded-2xl pl-14 pr-6 py-4 text-white placeholder:text-white/10 outline-none transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-2">
+                Secret Key (Password)
+              </label>
+              <div className="relative group">
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[#FFF005] transition-colors" />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="••••••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="w-full bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 focus:border-[#FFF005]/50 rounded-2xl pl-14 pr-6 py-4 text-white placeholder:text-white/10 outline-none transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <motion.button
+              type="submit"
+              disabled={loading}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full relative group overflow-hidden bg-white text-black py-4 rounded-2xl font-bold transition-all mt-8"
+            >
+              <div className="absolute inset-0 bg-[#FFF005] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10 flex items-center justify-center gap-2">
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Engaging Core...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Initialize Portal</span>
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
+              </div>
+            </motion.button>
+          </form>
+
+          {/* Footer Decoration */}
+          <div className="mt-10 pt-10 border-t border-white/5 flex justify-center">
+            <p className="text-[10px] text-white/20 font-bold tracking-[0.3em] uppercase">
+              ✨ Encrypted Protocol v2.6 ✨
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── Dynamic Light Orbs ── */}
+      <motion.div 
+        animate={{ 
+          x: [0, 100, 0], 
+          y: [0, 50, 0],
+          opacity: [0.1, 0.2, 0.1]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-blue-500/20 blur-[100px] rounded-full -z-10"
+      />
     </div>
   );
 }

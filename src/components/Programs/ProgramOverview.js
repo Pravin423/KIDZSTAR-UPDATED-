@@ -6,7 +6,7 @@ const programs = [
         place: 'Playgroup',
         title: 'PLAY GROUP',
         description: 'Play Group aims to provide a safe and stimulating environment where toddlers can explore, make choices and interact with others.',
-        image: '/child1.png',
+        image: '/img1.1.png',
         age: "2.5–3.5 yrs",
         daysWeekly: "3 days weekly",
         hoursPeriod: "3.30 hrs period"
@@ -15,7 +15,7 @@ const programs = [
         place: 'Nursery',
         title: 'NURSERY CLASS',
         description: 'In Nursery, we encourage children to use materials in flexible and imaginative ways, sustaining their interests and extending knowledge.',
-        image: '/child2.png',
+        image: '/img2.png',
         age: "3.5–4.5 yrs",
         daysWeekly: "3 days weekly",
         hoursPeriod: "3.30 hrs period"
@@ -24,7 +24,7 @@ const programs = [
         place: 'Junior KG',
         title: 'JUNIOR KINDERGARTEN',
         description: 'Junior KG introduces basic academic concepts through collaborative play, developing an understanding of themselves and the world.',
-        image: '/child3.png',
+        image: '/img3.png',
         age: "4.5–5.5 yrs",
         daysWeekly: "3 days weekly",
         hoursPeriod: "3.30 hrs period"

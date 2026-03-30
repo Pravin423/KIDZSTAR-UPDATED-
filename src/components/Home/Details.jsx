@@ -182,7 +182,7 @@ const Details = () => {
                             style={{ pathLength: rocketPathLength }}
                             d="M -50 0 C 200 400, 400 850, 800 850 S 1300 850, 1800 750" 
                             fill="none" 
-                            stroke="#FFF005" 
+                            stroke="#87FE41" 
                             strokeWidth="3.5" 
                         />
                     </svg>

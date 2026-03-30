@@ -166,7 +166,7 @@
 }
 
 .gradText {
-  background: linear-gradient(135deg, #FFF005 0%, #FFB800 30%, #FF6B35 60%, #FF4DA6 80%, #FFF005 100%);
+  background: linear-gradient(135deg, #87FE41 0%, #FFB800 30%, #FF6B35 60%, #FF4DA6 80%, #87FE41 100%);
   background-size: 250% 250%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -199,7 +199,7 @@
   /* gap for the gradient border */
   cursor: pointer;
   background: conic-gradient(from var(--btn-angle),
-      #7c3aed, #06b6d4, #FFF005, #ec4899, #7c3aed);
+      #7c3aed, #06b6d4, #87FE41, #ec4899, #7c3aed);
   animation: borderSpin 3s linear infinite;
   transition: transform 0.22s ease, filter 0.25s ease;
   will-change: transform, filter;

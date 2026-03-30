@@ -242,7 +242,7 @@ const Footer = () => {
               style={{ pathLength: rocketPathLength }}
               d={ROCKET_PATH}
               fill="none"
-              stroke="#FFF005"
+              stroke="#87FE41"
               strokeWidth="3.5"
             />
           </svg>

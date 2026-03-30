@@ -54,7 +54,7 @@ function SlideDots({ total, current, onSelect }) {
         >
           {i === current && (
             <motion.div
-              className="absolute inset-0 bg-[#FFF005] rounded-full origin-left"
+              className="absolute inset-0 bg-[#87FE41] rounded-full origin-left"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: SLIDE_DURATION / 1000, ease: "linear" }}
@@ -222,7 +222,7 @@ function Slide1({ kidScale }) {
             transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1 className={`${poppins.className} text-7xl md:text-[145px] leading-[0.8] font-black text-white uppercase mb-4 tracking-tighter`} style={{ textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-              Kidz<span className="text-[#FFF005]" style={{ textShadow: '0 0 25px rgba(255,240,5,0.4)' }}>star</span>
+              Kidz<span className="text-[#87FE41]" style={{ textShadow: '0 0 25px rgba(135,254,65,0.4)' }}>star</span>
             </h1>
           </motion.div>
 
@@ -257,7 +257,7 @@ function Slide1({ kidScale }) {
                     repeatDelay: 1
                   }
                 }}
-                className="text-[#FFF005]"
+                className="text-[#87FE41]"
               >
                 {dot}
               </motion.span>
@@ -430,7 +430,7 @@ function Slide2() {
         <motion.div
           className="pointer-events-none absolute w-[500px] h-[500px] rounded-full blur-[120px] opacity-30"
           style={{
-            background: "radial-gradient(circle, #FFF005, #00e5ff, transparent 70%)",
+            background: "radial-gradient(circle, #87FE41, #00e5ff, transparent 70%)",
             left: glowX, top: glowY,
             translateX: "-50%", translateY: "-50%",
           }}
@@ -447,7 +447,7 @@ function Slide2() {
           <h1 className={`${poppins.className} text-[80px] md:text-[110px] leading-none font-bold text-white drop-shadow-[0_0_40px_rgba(255,240,5,0.4)]`}>
             Your Child's Journey
           </h1>
-          <h2 className={`${poppins.className} text-[36px] md:text-[52px] font-bold text-[#FFF005] mt-1 drop-shadow-[0_0_20px_rgba(255,240,5,0.6)] uppercase`}>
+          <h2 className={`${poppins.className} text-[36px] md:text-[52px] font-bold text-[#87FE41] mt-1 drop-shadow-[0_0_20px_rgba(135,254,65,0.6)] uppercase`}>
             Admissions are Live For  2026-2027
           </h2>
         </motion.div>
@@ -483,7 +483,7 @@ function Slide2() {
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 rounded-full bg-[#FFF005]/60"
+            className="absolute w-2 h-2 rounded-full bg-[#87FE41]/60"
             style={{
               top: `${20 + Math.sin((i / 6) * Math.PI * 2) * 38}%`,
               left: `${50 + Math.cos((i / 6) * Math.PI * 2) * 38}%`,
@@ -573,10 +573,10 @@ const HomeBanner = () => {
                 <span className={`${poppins.className} text-white text-[11px] font-bold tracking-[0.1em] uppercase opacity-80`}>
                   Admissions Live
                 </span>
-                <div className="h-[2px] w-10 bg-[#FFF005] rounded-full shadow-[0_0_10px_rgba(255,240,5,0.4)]" />
+                <div className="h-[2px] w-10 bg-[#87FE41] rounded-full shadow-[0_0_10px_rgba(135,254,65,0.4)]" />
               </motion.div>
               <h1 className={`${poppins.className} text-[68px] leading-[0.85] font-bold text-white uppercase`}>Kidzstar</h1>
-              <motion.h2 className={`${poppins.className} text-[28px] font-bold text-[#FFF005] uppercase mt-2 flex items-center`}>
+              <motion.h2 className={`${poppins.className} text-[28px] font-bold text-[#87FE41] uppercase mt-2 flex items-center`}>
                 {"building futures".split("").map((char, i) => (
                   <motion.span
                     key={i}
@@ -626,13 +626,13 @@ const HomeBanner = () => {
               exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 1.2, ease: "easeInOut" }}
             >
-              <div className="mb-4 px-5 py-2 rounded-full border border-[#FFF005]/40 bg-[#FFF005]/10">
-                <span className={`${poppins.className} text-[#FFF005] text-xs font-semibold tracking-widest uppercase`}>
+              <div className="mb-4 px-5 py-2 rounded-full border border-[#87FE41]/40 bg-[#87FE41]/10">
+                <span className={`${poppins.className} text-[#87FE41] text-xs font-semibold tracking-widest uppercase`}>
                   2026 – 2027 Academic Year
                 </span>
               </div>
               <h1 className={`${poppins.className} text-[32px] leading-none font-bold text-white uppercase`}>Your Child's Journey</h1>
-              <h2 className={`${poppins.className} text-[28px] font-bold text-[#FFF005] uppercase`}>Admissions are Live</h2>
+              <h2 className={`${poppins.className} text-[28px] font-bold text-[#87FE41] uppercase`}>Admissions are Live</h2>
               <p className={`${poppins.className} text-[14px] text-white/70 font-extralight mt-2 tracking-[0.2em] uppercase`}>
                 Playground · Nursery · JR.KG · SR.KG
               </p>
@@ -654,7 +654,7 @@ const HomeBanner = () => {
             <button
               key={i}
               onClick={() => setActiveSlide(i)}
-              className={`w-8 h-2 rounded-full transition-all duration-300 ${i === activeSlide ? 'bg-[#FFF005]' : 'bg-white/30'}`}
+              className={`w-8 h-2 rounded-full transition-all duration-300 ${i === activeSlide ? 'bg-[#87FE41]' : 'bg-white/30'}`}
             />
           ))}
         </div>

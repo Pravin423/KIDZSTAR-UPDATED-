@@ -153,7 +153,7 @@ const WelcomeBanner = () => {
                             style={{ pathLength: rocketPathLength }}
                             d="M 1800 50 C 1400 100, 1000 700, 600 700 S 200 -100, -200 600"
                             fill="none"
-                            stroke="#FFF005"
+                            stroke="#87FE41"
                             strokeWidth="3.5"
                         />
                     </svg>

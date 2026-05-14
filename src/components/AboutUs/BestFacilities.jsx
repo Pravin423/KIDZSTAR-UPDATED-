@@ -19,9 +19,9 @@ const facilities = [
     title: "Colorful Classrooms",
     description: "Colorful and stimulating classrooms designed to spark imagination and encourage focus.",
     emoji: "🎨",
-    accent: "#FFF005",
-    glowColor: "rgba(255,240,5,0.4)",
-    borderColor: "rgba(255,240,5,0.25)",
+    accent: "#87FE41",
+    glowColor: "rgba(135,254,65,0.4)",
+    borderColor: "rgba(135,254,65,0.25)",
   },
   {
     number: "Sector 03",
@@ -122,7 +122,7 @@ function FacilityCard({ facility, index }) {
         </div>
 
         {/* Title */}
-        <h3 className="text-2xl font-bold text-white mb-4 leading-tight group-hover:text-[#FFF005] transition-colors duration-300">
+        <h3 className="text-2xl font-bold text-white mb-4 leading-tight group-hover:text-[#87FE41] transition-colors duration-300">
           {facility.title}
         </h3>
 
@@ -162,7 +162,7 @@ function SectionHeading() {
       </motion.div>
 
       <h1 className="text-4xl md:text-7xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
-        Best <span className="text-[#FFF005] drop-shadow-[0_0_15px_rgba(255,240,5,0.3)]">Facilities</span> <br className="hidden md:block"/> For Our <span className="text-[#FF6D92] drop-shadow-[0_0_15px_rgba(255,109,146,0.3)]">Explorers</span>
+        Best <span className="text-[#87FE41] drop-shadow-[0_0_15px_rgba(135,254,65,0.3)]">Facilities</span> <br className="hidden md:block"/> For Our <span className="text-[#FF6D92] drop-shadow-[0_0_15px_rgba(255,109,146,0.3)]">Explorers</span>
       </h1>
 
       <p className="max-w-2xl mx-auto text-[#a0a8cc] text-base md:text-lg leading-relaxed opacity-80">
